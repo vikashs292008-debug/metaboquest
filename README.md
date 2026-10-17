@@ -56,6 +56,28 @@ Metabolic health affects cardiovascular longevity, cognitive focus, daytime ener
 - **📸 Social PNG Card Generator**:
   - One-click client-side image generation rendering a crisp, 2x retina PNG scorecard ready for Instagram, X, or messaging apps.
 
+- **🔬 Interactive Metabolic Flexibility Laboratory & Simulator**:
+  - Real-time lifestyle simulator with dynamic SVG postprandial glucose & insulin curves (0 to 240 mins).
+  - Toggles for meal composition (refined vs high fiber), physical movement (sedentary vs 15-min walk vs soleus pumps), sleep quality (8h vs 4h sleep debt), and circadian meal timing (noon vs 10:30 PM).
+  - Live biometric readouts: estimated peak glucose, time-in-target, pancreatic insulin burden, and GLUT4 muscle uptake percentage.
+
+- **🃏 3D Myth vs. Fact Science Cards**:
+  - Interactive flip cards debunking popular metabolic myths with authentic endocrinology facts and peer-reviewed clinical citations.
+
+- **📊 60-Second Metabolic Habit Resilience Index**:
+  - Interactive lifestyle habit audit evaluating sleep, post-meal ambulation, dietary fiber density, and circadian eating cutoff with an animated progress gauge.
+
+- **🎵 Procedural Web Audio Engine**:
+  - Zero-latency native Web Audio synthesizer providing subtle, satisfying tactile feedback on options, successes, and completions with an on/off toggle.
+
+- **🎯 Multi-Mode Quest Selector**:
+  - *Classic 90-Sec Quest* (5 questions)
+  - *Metabolic Gauntlet* (10 questions for advanced learners, 1100 max points)
+  - *Topic Sprints* (Sleep & Circadian, Movement & Muscle, Fiber & Gut, Biomarkers & Lipids)
+
+- **📈 Device Quest History & 28-Day Consistency Heatmap**:
+  - GitHub-style consistency grid, historical score logs, and aggregate metrics persisted locally.
+
 - **📚 Metabolic Science Library**:
   - 6 deep-dive educational knowledge cards with category filters, practical takeaways, and direct links to peer-reviewed clinical research.
 
