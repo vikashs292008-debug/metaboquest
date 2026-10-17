@@ -8,6 +8,7 @@ import { MetabolicMythBusters } from '../components/MetabolicMythBusters';
 import { HowItWorks } from '../components/HowItWorks';
 import { MetabolicScoreAudit } from '../components/MetabolicScoreAudit';
 import { MetabolicActionPlan } from '../components/MetabolicActionPlan';
+import { BiomarkerLabGuide } from '../components/BiomarkerLabGuide';
 import { DailyQuest } from '../components/DailyQuest';
 import { LearningLibrary } from '../components/LearningLibrary';
 import { SteerClubConversion } from '../components/SteerClubConversion';
@@ -66,6 +67,9 @@ export function HomePage({
       <MetabolicActionPlan 
         showToast={showToast}
       />
+
+      {/* Interactive Biomarkers Decoder & TG/HDL Ratio Calculator */}
+      <BiomarkerLabGuide />
 
       <DailyQuest 
         onUnlockAchievement={onUnlockAchievement}
