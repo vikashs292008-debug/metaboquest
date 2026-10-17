@@ -50,13 +50,19 @@ export function Navbar({
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-brand-muted" aria-label="Main Navigation">
+        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-brand-muted" aria-label="Main Navigation">
           <button 
             onClick={() => scrollTo('metabolic-simulator')}
             className="hover:text-brand-lime transition-colors flex items-center gap-1.5"
           >
             <Sliders className="w-3.5 h-3.5 text-brand-lime" />
-            <span>Lab Simulator</span>
+            <span>Simulator</span>
+          </button>
+          <button 
+            onClick={() => scrollTo('cgm-lab')}
+            className="hover:text-brand-lime transition-colors"
+          >
+            CGM Lab
           </button>
           <button 
             onClick={() => scrollTo('mythbusters-section')}
@@ -65,19 +71,10 @@ export function Navbar({
             Myth vs Fact
           </button>
           <button 
-            onClick={() => scrollTo('metabolic-audit')}
+            onClick={() => scrollTo('action-plan')}
             className="hover:text-brand-lime transition-colors"
           >
-            Habit Index
-          </button>
-          <button 
-            onClick={() => scrollTo('daily-quest-section')}
-            className="hover:text-brand-lime transition-colors flex items-center gap-1.5"
-          >
-            <span>Daily Quest</span>
-            <span className="px-1.5 py-0.5 text-[9px] uppercase font-bold bg-brand-lime/10 text-brand-lime rounded-full border border-brand-lime/30">
-              Active
-            </span>
+            7-Day Plan
           </button>
           <button 
             onClick={() => scrollTo('learning-library')}

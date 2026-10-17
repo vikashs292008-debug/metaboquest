@@ -2,10 +2,12 @@ import React from 'react';
 import { Hero } from '../components/Hero';
 import { FeatureHighlights } from '../components/FeatureHighlights';
 import { MetabolicSimulator } from '../components/MetabolicSimulator';
+import { CGMComparisonLab } from '../components/CGMComparisonLab';
 import { ChallengePreview } from '../components/ChallengePreview';
 import { MetabolicMythBusters } from '../components/MetabolicMythBusters';
 import { HowItWorks } from '../components/HowItWorks';
 import { MetabolicScoreAudit } from '../components/MetabolicScoreAudit';
+import { MetabolicActionPlan } from '../components/MetabolicActionPlan';
 import { DailyQuest } from '../components/DailyQuest';
 import { LearningLibrary } from '../components/LearningLibrary';
 import { SteerClubConversion } from '../components/SteerClubConversion';
@@ -40,8 +42,11 @@ export function HomePage({
 
       <FeatureHighlights />
 
-      {/* Flagship Interactive Metabolic Laboratory */}
+      {/* Flagship Interactive Metabolic Simulator */}
       <MetabolicSimulator />
+
+      {/* Side-by-Side CGM Food Matrix Lab */}
+      <CGMComparisonLab />
 
       <ChallengePreview 
         onStartFullQuest={onStartQuest}
@@ -55,6 +60,11 @@ export function HomePage({
       {/* 60-Second Habit Resilience Audit */}
       <MetabolicScoreAudit 
         onStartQuest={onStartQuest}
+      />
+
+      {/* 7-Day Metabolic Reset & Protocol Guide */}
+      <MetabolicActionPlan 
+        showToast={showToast}
       />
 
       <DailyQuest 
