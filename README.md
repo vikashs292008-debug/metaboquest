@@ -218,10 +218,11 @@ MetaboQuest is solely an educational tool designed to promote general scientific
 
 ---
 
-## 11. Known Limitations & Configuration Placeholders
-- **Live Deployment URL**: Placeholder ready for hackathon organizer's deployment target.
-- **Repository URL**: Placeholder for team GitHub repository.
-- **Steer Club URL**: Configured via `STEER_CLUB_URL` constant in `src/utils/sharing.js` (currently pointing to `https://steer.club`).
+## 11. Deployment Status & Live Links
+- **Live Production URL**: [https://8377fb32479171.lhr.life](https://8377fb32479171.lhr.life)
+- **Sample Head-to-Head Challenge URL**: [https://8377fb32479171.lhr.life/?challenge=1&score=500&archetype=Metabolic%20Explorer&from=Jordan](https://8377fb32479171.lhr.life/?challenge=1&score=500&archetype=Metabolic%20Explorer&from=Jordan)
+- **Local Dev Server**: `http://localhost:3000`
+- **Steer Club URL**: Configured via `STEER_CLUB_URL` constant in `src/utils/sharing.js` (pointing to `https://steer.club`).
 
 ---
 
