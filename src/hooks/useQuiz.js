@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { QUESTIONS_BANK } from '../data/questions';
+import { QUESTIONS_BANK, TOPICS } from '../data/questions';
 import { calculateScorecard, TOTAL_QUESTIONS_PER_ROUND } from '../utils/scoring';
 import { recordLocalMetric } from '../utils/persistence';
+import { sound } from '../utils/audio';
 
 /**
  * Fisher-Yates array shuffle
@@ -16,15 +17,44 @@ function shuffleArray(array) {
 }
 
 /**
- * Selects 5 balanced questions from different topics when possible
+ * Selects questions based on chosen mode
+ * @param {'classic' | 'gauntlet' | 'sleep' | 'movement' | 'nutrition' | 'biomarkers'} mode
  */
-function selectQuestions() {
+function selectQuestionsByMode(mode = 'classic') {
   const shuffled = shuffleArray(QUESTIONS_BANK);
+
+  if (mode === 'gauntlet') {
+    // 10 questions covering multiple topics
+    return shuffled.slice(0, 10);
+  }
+
+  if (mode === 'sleep') {
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.SLEEP);
+    return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
+  }
+
+  if (mode === 'movement') {
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.MOVEMENT);
+    return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
+  }
+
+  if (mode === 'nutrition') {
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.NUTRITION);
+    return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
+  }
+
+  if (mode === 'biomarkers') {
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.BIOMARKERS || q.topic === TOPICS.GLUCOSE);
+    return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
+  }
+
+  // Default 'classic' mode: 5 questions
   return shuffled.slice(0, TOTAL_QUESTIONS_PER_ROUND);
 }
 
-export function useQuiz(initialTimerEnabled = true) {
-  const [questions, setQuestions] = useState(() => selectQuestions());
+export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
+  const [questMode, setQuestMode] = useState(initialMode);
+  const [questions, setQuestions] = useState(() => selectQuestionsByMode(initialMode));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
   const [isAnswerLocked, setIsAnswerLocked] = useState(false);
@@ -38,6 +68,7 @@ export function useQuiz(initialTimerEnabled = true) {
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   
   const timerRef = useRef(null);
+  const totalQuestionsInRound = questions.length;
   const currentQuestion = questions[currentIndex] || null;
 
   // Track quiz start
@@ -61,15 +92,16 @@ export function useQuiz(initialTimerEnabled = true) {
   }, [isTimerRunning, isCompleted, timerEnabled]);
 
   /**
-   * Selects an answer option
+   * Selects an answer option with audio
    */
   const handleSelectOption = useCallback((optionId) => {
     if (isAnswerLocked || isCompleted) return;
+    sound.playSelect();
     setSelectedOptionId(optionId);
   }, [isAnswerLocked, isCompleted]);
 
   /**
-   * Confirms the selected answer, locks selection, computes correctness, awards points
+   * Confirms the selected answer, locks selection, computes correctness, awards points, plays audio
    */
   const handleConfirmAnswer = useCallback(() => {
     if (!selectedOptionId || isAnswerLocked || !currentQuestion) return;
@@ -77,6 +109,12 @@ export function useQuiz(initialTimerEnabled = true) {
     // Immediately lock to prevent double scoring or rapid clicks
     setIsAnswerLocked(true);
     const isCorrect = selectedOptionId === currentQuestion.correctAnswerId;
+
+    if (isCorrect) {
+      sound.playSuccess();
+    } else {
+      sound.playError();
+    }
 
     const answerRecord = {
       questionId: currentQuestion.id,
@@ -94,28 +132,31 @@ export function useQuiz(initialTimerEnabled = true) {
   }, [selectedOptionId, isAnswerLocked, currentQuestion]);
 
   /**
-   * Advances to next question or finalizes quiz if on the 5th question
+   * Advances to next question or finalizes quiz if on the last question
    */
   const handleNextQuestion = useCallback(() => {
-    if (currentIndex + 1 < TOTAL_QUESTIONS_PER_ROUND) {
+    sound.playSelect();
+    if (currentIndex + 1 < totalQuestionsInRound) {
       setCurrentIndex(prev => prev + 1);
       setSelectedOptionId(null);
       setIsAnswerLocked(false);
       setIsFeedbackVisible(false);
     } else {
-      // Completed all 5 questions
+      // Completed all questions in the round
+      sound.playComplete();
       setIsCompleted(true);
       setIsTimerRunning(false);
       setIsFeedbackVisible(false);
       recordLocalMetric('quizCompletions');
     }
-  }, [currentIndex]);
+  }, [currentIndex, totalQuestionsInRound]);
 
   /**
    * Allows user to skip current question (treated as non-answered, 0 pts)
    */
   const handleSkipQuestion = useCallback(() => {
     if (isAnswerLocked || !currentQuestion) return;
+    sound.playSelect();
     setIsAnswerLocked(true);
 
     const answerRecord = {
@@ -135,10 +176,12 @@ export function useQuiz(initialTimerEnabled = true) {
   }, [isAnswerLocked, currentQuestion]);
 
   /**
-   * Cleanly restarts the quiz with fresh question order and zero state leaks
+   * Cleanly restarts the quiz with fresh question order and chosen mode
    */
-  const handleRestartQuiz = useCallback(() => {
-    setQuestions(selectQuestions());
+  const handleRestartQuiz = useCallback((newMode = questMode) => {
+    setQuestMode(newMode);
+    const freshQuestions = selectQuestionsByMode(newMode);
+    setQuestions(freshQuestions);
     setCurrentIndex(0);
     setSelectedOptionId(null);
     setIsAnswerLocked(false);
@@ -148,23 +191,25 @@ export function useQuiz(initialTimerEnabled = true) {
     setElapsedSeconds(0);
     setIsTimerRunning(true);
     recordLocalMetric('quizStarts');
-  }, []);
+  }, [questMode]);
 
   /**
    * Toggles the timer mode without resetting quiz progress
    */
   const handleToggleTimer = useCallback(() => {
+    sound.playSelect();
     setTimerEnabled(prev => !prev);
   }, []);
 
   // Compute final scorecard deterministically
-  const scorecard = calculateScorecard(answers, elapsedSeconds, isCompleted);
+  const scorecard = calculateScorecard(answers, elapsedSeconds, isCompleted, totalQuestionsInRound);
 
   return {
+    questMode,
     questions,
     currentQuestion,
     currentIndex,
-    totalQuestions: TOTAL_QUESTIONS_PER_ROUND,
+    totalQuestions: totalQuestionsInRound,
     selectedOptionId,
     isAnswerLocked,
     isFeedbackVisible,

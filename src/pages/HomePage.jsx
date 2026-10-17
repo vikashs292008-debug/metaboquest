@@ -1,8 +1,11 @@
 import React from 'react';
 import { Hero } from '../components/Hero';
 import { FeatureHighlights } from '../components/FeatureHighlights';
+import { MetabolicSimulator } from '../components/MetabolicSimulator';
 import { ChallengePreview } from '../components/ChallengePreview';
+import { MetabolicMythBusters } from '../components/MetabolicMythBusters';
 import { HowItWorks } from '../components/HowItWorks';
+import { MetabolicScoreAudit } from '../components/MetabolicScoreAudit';
 import { DailyQuest } from '../components/DailyQuest';
 import { LearningLibrary } from '../components/LearningLibrary';
 import { SteerClubConversion } from '../components/SteerClubConversion';
@@ -11,6 +14,7 @@ import { Footer } from '../components/Footer';
 
 export function HomePage({
   onStartQuest,
+  onOpenModes,
   challengeData,
   onUnlockAchievement,
   showToast
@@ -36,11 +40,22 @@ export function HomePage({
 
       <FeatureHighlights />
 
+      {/* Flagship Interactive Metabolic Laboratory */}
+      <MetabolicSimulator />
+
       <ChallengePreview 
         onStartFullQuest={onStartQuest}
       />
 
+      {/* Interactive Myth vs Fact Flip Cards */}
+      <MetabolicMythBusters />
+
       <HowItWorks />
+
+      {/* 60-Second Habit Resilience Audit */}
+      <MetabolicScoreAudit 
+        onStartQuest={onStartQuest}
+      />
 
       <DailyQuest 
         onUnlockAchievement={onUnlockAchievement}

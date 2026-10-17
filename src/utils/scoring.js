@@ -58,15 +58,19 @@ export const ARCHETYPES = [
  * @param {boolean} isCompleted
  * @returns {Object} Full scorecard
  */
-export function calculateScorecard(answers, durationSeconds = 0, isCompleted = true) {
+export function calculateScorecard(answers, durationSeconds = 0, isCompleted = true, totalQuestionsTarget = TOTAL_QUESTIONS_PER_ROUND) {
   const answeredCount = answers.length;
   const correctCount = answers.filter(a => a.isCorrect).length;
   const incorrectCount = answeredCount - correctCount;
 
+  const maxPossibleScore = (totalQuestionsTarget * POINTS_PER_CORRECT) + COMPLETION_BONUS;
+
   // Points calculation
   const rawPoints = correctCount * POINTS_PER_CORRECT;
-  const completionBonusAwarded = isCompleted && answeredCount >= TOTAL_QUESTIONS_PER_ROUND ? COMPLETION_BONUS : 0;
+  const completionBonusAwarded = isCompleted && answeredCount >= totalQuestionsTarget ? COMPLETION_BONUS : 0;
   const totalPoints = rawPoints + completionBonusAwarded;
+
+  const accuracyPercent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
 
   // Topic breakdown
   const topicBreakdown = {};
@@ -80,8 +84,19 @@ export function calculateScorecard(answers, durationSeconds = 0, isCompleted = t
     }
   });
 
-  // Archetype determination
-  const archetype = ARCHETYPES.find(arch => totalPoints >= arch.minScore) || ARCHETYPES[ARCHETYPES.length - 1];
+  // Archetype determination based on accuracy tier
+  let archetype;
+  if (accuracyPercent === 100) {
+    archetype = ARCHETYPES[0]; // Metabolic Scholar
+  } else if (accuracyPercent >= 80) {
+    archetype = ARCHETYPES[1]; // Metabolic Explorer
+  } else if (accuracyPercent >= 60) {
+    archetype = ARCHETYPES[2]; // Science Seeker
+  } else if (accuracyPercent >= 40) {
+    archetype = ARCHETYPES[3]; // Knowledge Builder
+  } else {
+    archetype = ARCHETYPES[4]; // Wellness Curious
+  }
 
   // Specific educational insight based on missed topics
   const missedAnswers = answers.filter(a => !a.isCorrect);
@@ -89,13 +104,13 @@ export function calculateScorecard(answers, durationSeconds = 0, isCompleted = t
   
   if (missedAnswers.length > 0) {
     const firstMissed = missedAnswers[0];
-    if (firstMissed.topic.includes('Sleep')) {
+    if (firstMissed.topic && firstMissed.topic.includes('Sleep')) {
       tailoredInsight = 'Insight to explore: Sleep architecture directly impacts your hormones. Even one night of restricted rest temporarily decreases insulin sensitivity by up to 20-30%.';
-    } else if (firstMissed.topic.includes('Movement')) {
+    } else if (firstMissed.topic && firstMissed.topic.includes('Movement')) {
       tailoredInsight = 'Insight to explore: Skeletal muscle acts as your body\'s primary glucose sink, taking in up to 80% of post-meal blood sugar through movement.';
-    } else if (firstMissed.topic.includes('Nutrition')) {
+    } else if (firstMissed.topic && firstMissed.topic.includes('Nutrition')) {
       tailoredInsight = 'Insight to explore: Soluble dietary fiber feeds beneficial gut microbes that naturally trigger satiety hormones (GLP-1 and PYY) while moderating glucose spikes.';
-    } else if (firstMissed.topic.includes('Lipids') || firstMissed.topic.includes('Biomarkers')) {
+    } else if (firstMissed.topic && (firstMissed.topic.includes('Lipids') || firstMissed.topic.includes('Biomarkers'))) {
       tailoredInsight = 'Insight to explore: A high Triglyceride-to-HDL ratio often signals underlying insulin resistance more accurately than total cholesterol alone.';
     } else {
       tailoredInsight = 'Insight to explore: Metabolic health is about cellular energy efficiency and adaptability across organs, rather than scale weight alone.';
@@ -104,14 +119,14 @@ export function calculateScorecard(answers, durationSeconds = 0, isCompleted = t
 
   return {
     totalPoints,
-    maxScore: MAX_SCORE,
+    maxScore: maxPossibleScore,
     correctCount,
     incorrectCount,
-    totalQuestions: TOTAL_QUESTIONS_PER_ROUND,
+    totalQuestions: totalQuestionsTarget,
     durationSeconds,
     isCompleted,
     completionBonusAwarded,
-    accuracyPercent: answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0,
+    accuracyPercent,
     archetype,
     topicBreakdown,
     tailoredInsight

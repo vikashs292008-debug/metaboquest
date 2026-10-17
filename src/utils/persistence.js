@@ -138,3 +138,31 @@ export function saveUserSettings(settings) {
   setStoredItem(STORAGE_KEYS.SETTINGS, updated);
   return updated;
 }
+
+// Quest attempt history (on-device only)
+export function getQuestHistory() {
+  return getStoredItem(STORAGE_KEYS.HISTORY, []);
+}
+
+export function recordQuestAttempt({ score, maxScore, accuracyPercent, archetypeTitle, mode = 'classic' }) {
+  const history = getQuestHistory();
+  const newRecord = {
+    id: `quest_${Date.now()}`,
+    timestamp: Date.now(),
+    date: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+    dateKey: getTodayDateString(),
+    score,
+    maxScore,
+    accuracyPercent,
+    archetypeTitle,
+    mode
+  };
+  const updated = [newRecord, ...history].slice(0, 30); // Keep last 30 runs
+  setStoredItem(STORAGE_KEYS.HISTORY, updated);
+  return updated;
+}
+
+export function clearQuestHistory() {
+  setStoredItem(STORAGE_KEYS.HISTORY, []);
+  return [];
+}

@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
-import { Sparkles, Trophy, Menu, X, ArrowRight, Activity } from 'lucide-react';
+import { Sparkles, Trophy, Menu, X, ArrowRight, Activity, Volume2, VolumeX, History, Zap, Sliders } from 'lucide-react';
+import { sound } from '../utils/audio';
 
-export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) {
+export function Navbar({ 
+  onStartQuest, 
+  onOpenAchievements, 
+  onOpenHistory, 
+  onOpenModes,
+  unlockedCount = 0 
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [soundActive, setSoundActive] = useState(() => sound.isSoundEnabled());
+
+  const handleToggleSound = () => {
+    const newState = sound.toggleSound();
+    setSoundActive(newState);
+  };
 
   const scrollTo = (id) => {
     setMobileMenuOpen(false);
@@ -13,7 +26,7 @@ export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) 
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-brand-bg/80 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-brand-bg/85 backdrop-blur-md transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Wordmark & Animated Logo */}
@@ -31,32 +44,39 @@ export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) 
               Metabo<span className="text-brand-lime">Quest</span>
             </span>
             <span className="text-[10px] tracking-wider uppercase text-brand-muted -mt-1 font-semibold">
-              90-Sec Challenge
+              Science Platform
             </span>
           </div>
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-brand-muted" aria-label="Main Navigation">
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-brand-muted" aria-label="Main Navigation">
           <button 
-            onClick={() => scrollTo('how-it-works')}
-            className="hover:text-brand-lime transition-colors"
+            onClick={() => scrollTo('metabolic-simulator')}
+            className="hover:text-brand-lime transition-colors flex items-center gap-1.5"
           >
-            How it works
+            <Sliders className="w-3.5 h-3.5 text-brand-lime" />
+            <span>Lab Simulator</span>
           </button>
           <button 
-            onClick={() => scrollTo('preview-section')}
+            onClick={() => scrollTo('mythbusters-section')}
             className="hover:text-brand-lime transition-colors"
           >
-            Preview
+            Myth vs Fact
+          </button>
+          <button 
+            onClick={() => scrollTo('metabolic-audit')}
+            className="hover:text-brand-lime transition-colors"
+          >
+            Habit Index
           </button>
           <button 
             onClick={() => scrollTo('daily-quest-section')}
             className="hover:text-brand-lime transition-colors flex items-center gap-1.5"
           >
             <span>Daily Quest</span>
-            <span className="px-1.5 py-0.5 text-[10px] uppercase font-bold bg-brand-lime/10 text-brand-lime rounded-full border border-brand-lime/30">
-              New
+            <span className="px-1.5 py-0.5 text-[9px] uppercase font-bold bg-brand-lime/10 text-brand-lime rounded-full border border-brand-lime/30">
+              Active
             </span>
           </button>
           <button 
@@ -67,33 +87,72 @@ export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) 
           </button>
         </nav>
 
-        {/* Right actions: Achievements button & Primary CTA */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Right utility buttons: Sound, History, Badges, Modes, Play CTA */}
+        <div className="hidden sm:flex items-center gap-2.5">
+          {/* Sound Toggle */}
+          <button
+            onClick={handleToggleSound}
+            aria-label={soundActive ? 'Mute sound effects' : 'Enable sound effects'}
+            className="p-2 rounded-lg border border-white/10 bg-brand-surface hover:bg-white/5 text-brand-muted hover:text-brand-text transition-colors"
+            title={soundActive ? 'Mute sound' : 'Unmute sound'}
+          >
+            {soundActive ? <Volume2 className="w-4 h-4 text-brand-lime" /> : <VolumeX className="w-4 h-4 text-brand-muted" />}
+          </button>
+
+          {/* History */}
+          <button
+            onClick={onOpenHistory}
+            className="p-2 rounded-lg border border-white/10 bg-brand-surface hover:bg-white/5 text-brand-muted hover:text-brand-text transition-colors"
+            title="Quest Activity & History"
+            aria-label="View history"
+          >
+            <History className="w-4 h-4 text-blue-400" />
+          </button>
+
+          {/* Badges */}
           <button
             onClick={onOpenAchievements}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-brand-surface hover:bg-white/5 hover:border-white/20 text-xs font-semibold text-brand-text transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-brand-surface hover:bg-white/5 text-xs font-semibold text-brand-text transition-all"
             title="View unlocked badges"
           >
             <Trophy className="w-3.5 h-3.5 text-amber-400" />
             <span>Badges</span>
             {unlockedCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-brand-lime text-brand-bg text-[11px] font-bold flex items-center justify-center">
+              <span className="w-4 h-4 rounded-full bg-brand-lime text-brand-bg text-[10px] font-bold flex items-center justify-center">
                 {unlockedCount}
               </span>
             )}
           </button>
 
+          {/* Modes Button */}
+          <button
+            onClick={onOpenModes}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand-violet/40 bg-brand-violet/10 hover:bg-brand-violet/20 text-xs font-semibold text-brand-violet transition-all"
+            title="Choose Quest Mode"
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Modes</span>
+          </button>
+
+          {/* Primary Play CTA */}
           <button
             onClick={onStartQuest}
             className="group relative inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-sm hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime"
           >
-            <span>Start your quest</span>
+            <span>Start Quest</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
 
-        {/* Mobile Hamburger toggle */}
-        <div className="flex md:hidden items-center gap-2">
+        {/* Mobile controls */}
+        <div className="flex sm:hidden items-center gap-1.5">
+          <button
+            onClick={handleToggleSound}
+            aria-label="Toggle sound"
+            className="p-2 rounded-lg border border-white/10 bg-brand-surface text-brand-muted"
+          >
+            {soundActive ? <Volume2 className="w-4 h-4 text-brand-lime" /> : <VolumeX className="w-4 h-4" />}
+          </button>
           <button
             onClick={onOpenAchievements}
             aria-label="View badges"
@@ -113,19 +172,26 @@ export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) 
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-white/10 bg-brand-surface/98 backdrop-blur-xl px-4 py-5 space-y-4">
-          <nav className="flex flex-col space-y-3 text-base font-medium text-brand-text">
+        <div className="lg:hidden border-b border-white/10 bg-brand-surface/98 backdrop-blur-xl px-4 py-5 space-y-4">
+          <nav className="flex flex-col space-y-3 text-sm font-medium text-brand-text">
             <button 
-              onClick={() => scrollTo('how-it-works')}
-              className="text-left py-1 text-brand-muted hover:text-brand-lime"
+              onClick={() => scrollTo('metabolic-simulator')}
+              className="text-left py-1 text-brand-muted hover:text-brand-lime flex items-center gap-2"
             >
-              How it works
+              <Sliders className="w-4 h-4 text-brand-lime" />
+              <span>Lab Simulator</span>
             </button>
             <button 
-              onClick={() => scrollTo('preview-section')}
+              onClick={() => scrollTo('mythbusters-section')}
               className="text-left py-1 text-brand-muted hover:text-brand-lime"
             >
-              Interactive Preview
+              Myth vs Fact Cards
+            </button>
+            <button 
+              onClick={() => scrollTo('metabolic-audit')}
+              className="text-left py-1 text-brand-muted hover:text-brand-lime"
+            >
+              Habit Resilience Index
             </button>
             <button 
               onClick={() => scrollTo('daily-quest-section')}
@@ -144,7 +210,31 @@ export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) 
             </button>
           </nav>
 
-          <div className="pt-2 border-t border-white/10">
+          <div className="pt-3 border-t border-white/10 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenHistory();
+              }}
+              className="py-2.5 rounded-xl bg-brand-card border border-white/10 text-brand-text text-xs font-semibold flex items-center justify-center gap-1.5"
+            >
+              <History className="w-4 h-4 text-blue-400" />
+              <span>History</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenModes();
+              }}
+              className="py-2.5 rounded-xl bg-brand-card border border-brand-violet/30 text-brand-violet text-xs font-semibold flex items-center justify-center gap-1.5"
+            >
+              <Zap className="w-4 h-4" />
+              <span>Quest Modes</span>
+            </button>
+          </div>
+
+          <div className="pt-2">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -152,7 +242,7 @@ export function Navbar({ onStartQuest, onOpenAchievements, unlockedCount = 0 }) 
               }}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-base shadow-glow-lime"
             >
-              <span>Start your quest</span>
+              <span>Start Quest</span>
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>

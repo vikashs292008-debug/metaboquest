@@ -3,23 +3,30 @@ import { Navbar } from './components/Navbar';
 import { Toast } from './components/Toast';
 import { AchievementsModal } from './components/AchievementsModal';
 import { ChallengeInviteModal } from './components/ChallengeInviteModal';
+import { QuestModeModal } from './components/QuestModeModal';
+import { QuestHistoryModal } from './components/QuestHistoryModal';
 import { HomePage } from './pages/HomePage';
 import { QuizEngine } from './components/QuizEngine/QuizEngine';
 import { ResultsScreen } from './components/Results/ResultsScreen';
 import { useQuiz } from './hooks/useQuiz';
 import { parseChallengeParams } from './utils/sharing';
-import { getUnlockedAchievements, saveUnlockedAchievement } from './utils/persistence';
+import { getUnlockedAchievements, saveUnlockedAchievement, recordQuestAttempt } from './utils/persistence';
 import { ACHIEVEMENTS } from './data/achievements';
 
 export default function App() {
   const [view, setView] = useState('landing'); // 'landing' | 'quiz' | 'results'
   const [challengeData, setChallengeData] = useState(null);
   const [unlockedAchievements, setUnlockedAchievements] = useState(() => getUnlockedAchievements());
+  
+  // Modals state
   const [isAchievementsModalOpen, setIsAchievementsModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isModesModalOpen, setIsModesModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  
   const [toast, setToast] = useState(null);
 
-  const quizState = useQuiz(true);
+  const quizState = useQuiz(true, 'classic');
 
   // Show auto-dismissing toast
   const showToast = useCallback((toastData) => {
@@ -65,27 +72,40 @@ export default function App() {
     }
   }, [unlockAchievement, showToast]);
 
-  // Monitor quiz completion to transition to Results and award achievements
+  // Monitor quiz completion to transition to Results, record history, and award achievements
   useEffect(() => {
     if (quizState.isCompleted && view === 'quiz') {
       setView('results');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
+      // Save to local device history
+      recordQuestAttempt({
+        score: quizState.scorecard.totalPoints,
+        maxScore: quizState.scorecard.maxScore,
+        accuracyPercent: quizState.scorecard.accuracyPercent,
+        archetypeTitle: quizState.scorecard.archetype.title,
+        mode: quizState.questMode
+      });
+
       // Award first quest badge
       unlockAchievement('first_quest');
 
-      // Award perfect score badge if 600 points achieved
+      // Award perfect score badge if max possible score achieved
       if (quizState.scorecard.totalPoints >= quizState.scorecard.maxScore) {
         unlockAchievement('perfect_five');
       }
     }
-  }, [quizState.isCompleted, quizState.scorecard, view, unlockAchievement]);
+  }, [quizState.isCompleted, quizState.scorecard, quizState.questMode, view, unlockAchievement]);
 
   // Handlers
-  const handleStartQuest = () => {
-    quizState.restartQuiz();
+  const handleStartQuest = (mode = 'classic') => {
+    quizState.restartQuiz(mode);
     setView('quiz');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSelectMode = (modeId) => {
+    handleStartQuest(modeId);
   };
 
   const handleExitToHome = () => {
@@ -94,7 +114,7 @@ export default function App() {
   };
 
   const handleReplayQuest = () => {
-    quizState.restartQuiz();
+    quizState.restartQuiz(quizState.questMode);
     setView('quiz');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -108,25 +128,31 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text flex flex-col font-body selection:bg-brand-lime selection:text-brand-bg">
+    <div className="min-h-screen bg-brand-bg text-brand-text flex flex-col font-body selection:bg-brand-lime selection:text-brand-bg relative">
       
+      {/* Background ambient grid pattern */}
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none z-0" />
+
       {/* Toast Alert Region */}
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       {/* Main App Bar (shown on landing page) */}
       {view === 'landing' && (
         <Navbar 
-          onStartQuest={handleStartQuest}
+          onStartQuest={() => handleStartQuest('classic')}
           onOpenAchievements={() => setIsAchievementsModalOpen(true)}
+          onOpenHistory={() => setIsHistoryModalOpen(true)}
+          onOpenModes={() => setIsModesModalOpen(true)}
           unlockedCount={unlockedAchievements.length}
         />
       )}
 
       {/* App Views */}
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         {view === 'landing' && (
           <HomePage 
-            onStartQuest={handleStartQuest}
+            onStartQuest={() => handleStartQuest('classic')}
+            onOpenModes={() => setIsModesModalOpen(true)}
             challengeData={challengeData}
             onUnlockAchievement={unlockAchievement}
             showToast={showToast}
@@ -167,6 +193,20 @@ export default function App() {
         score={quizState.scorecard?.totalPoints || 500}
         archetype={quizState.scorecard?.archetype?.title || 'Metabolic Explorer'}
         showToast={showToast}
+      />
+
+      {/* Quest Modes Selector Modal */}
+      <QuestModeModal
+        isOpen={isModesModalOpen}
+        onClose={() => setIsModesModalOpen(false)}
+        onSelectMode={handleSelectMode}
+      />
+
+      {/* Quest History & Activity Modal */}
+      <QuestHistoryModal
+        isOpen={isHistoryModalOpen}
+        onClose={() => setIsHistoryModalOpen(false)}
+        onLaunchQuest={() => handleStartQuest('classic')}
       />
 
     </div>
