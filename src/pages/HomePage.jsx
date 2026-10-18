@@ -18,6 +18,7 @@ import { Footer } from '../components/Footer';
 export function HomePage({
   onStartQuest,
   onOpenModes,
+  onOpenAbout,
   challengeData,
   onUnlockAchievement,
   showToast
@@ -84,7 +85,10 @@ export function HomePage({
 
       <HealthDisclaimer />
 
-      <Footer onStartQuest={onStartQuest} />
+      <Footer 
+        onStartQuest={onStartQuest} 
+        onOpenAbout={onOpenAbout}
+      />
     </div>
   );
 }

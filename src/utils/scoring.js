@@ -1,134 +1,133 @@
 /**
- * Centralized Scoring & Archetype Utility
- * Deterministic, single source of truth for scoring across the entire app.
+ * MetaboQuest Scoring & Personalization Engine
+ * 
+ * Simple, transparent knowledge-based scoring:
+ * - 100 points for each correct answer
+ * - Maximum score: 500 (5 questions * 100)
+ * - Three playful learning labels (Curious Explorer, Knowledge Builder, Metabolic Health Enthusiast)
+ * - Strictly educational; measures quiz performance only with zero medical inferences.
  */
 
 export const POINTS_PER_CORRECT = 100;
-export const COMPLETION_BONUS = 100;
 export const TOTAL_QUESTIONS_PER_ROUND = 5;
-export const MAX_SCORE = (TOTAL_QUESTIONS_PER_ROUND * POINTS_PER_CORRECT) + COMPLETION_BONUS; // 600
+export const MAX_SCORE = TOTAL_QUESTIONS_PER_ROUND * POINTS_PER_CORRECT; // 500
 
 export const ARCHETYPES = [
   {
-    minScore: 600,
-    title: 'Metabolic Scholar',
-    badge: '🏆',
-    color: '#C6FF65',
-    tagline: 'Master of cellular energy & metabolic pathways',
-    description: 'You demonstrated comprehensive mastery across circadian biology, muscle physiology, and nutrition science.'
-  },
-  {
+    id: 'enthusiast',
     minScore: 500,
-    title: 'Metabolic Explorer',
+    title: 'Metabolic Health Enthusiast',
     badge: '⚡',
-    color: '#A78BFA',
-    tagline: 'Deep understanding of metabolic balance',
-    description: 'Outstanding grasp of metabolic health principles! You understand the critical connections between sleep, muscle, and glucose.'
+    color: '#C6FF65',
+    tagline: 'Comprehensive mastery of cellular energy pathways',
+    description: 'Flawless quest! You demonstrated exceptional literacy across circadian biology, glucose dynamics, and evidence-informed health principles.',
+    educationalTip: 'Challenge yourself further by exploring advanced lipid particle ratios and how clinicians evaluate metabolic flexibility.'
   },
   {
-    minScore: 400,
-    title: 'Science Seeker',
-    badge: '🔬',
-    color: '#60A5FA',
-    tagline: 'Strong foundation in evidence-based health',
-    description: 'Great intuition for how the human body processes energy. A few nuanced biological mechanisms await your discovery!'
-  },
-  {
+    id: 'builder',
     minScore: 300,
     title: 'Knowledge Builder',
     badge: '🌱',
     color: '#34D399',
-    tagline: 'Actively building metabolic literacy',
-    description: 'You are uncovering key metabolic realities that challenge common health myths. Every insight empowers better daily choices.'
+    tagline: 'Strong foundation in evidence-based metabolic biology',
+    description: 'Great grasp of core metabolic mechanisms! You clearly understand how sleep, muscle contraction, and nutrition connect to support daily energy.',
+    educationalTip: 'A few nuanced biological mechanisms await your exploration—such as how nighttime circadian clocks regulate insulin secretion.'
   },
   {
+    id: 'explorer',
     minScore: 0,
-    title: 'Wellness Curious',
-    badge: '✨',
-    color: '#FBBF24',
-    tagline: 'Embarking on the metabolic learning journey',
-    description: 'Welcome to metabolic science! Health media often spreads oversimplified myths; you now have clear, science-backed facts to build upon.'
+    title: 'Curious Explorer',
+    badge: '🧭',
+    color: '#A78BFA',
+    tagline: 'Embarking on the metabolic discovery journey',
+    description: 'Every great explorer begins with curiosity. You are discovering key biological realities that cut through common wellness myths!',
+    educationalTip: 'Metabolism is not just a bathroom scale number—it is the living biochemical energy network powering every cell in your body.'
   }
 ];
 
 /**
- * Calculates deterministic quiz results.
- * @param {Array<{questionId: string, selectedOptionId: string, isCorrect: boolean, topic: string}>} answers
+ * Calculates deterministic quiz results and personalized learning recommendations.
+ * 
+ * @param {Array<{questionId: string, selectedOptionId: string, isCorrect: boolean, topic: string, questionText: string, explanation: string, sourceTitle?: string, sourceUrl?: string}>} answers
  * @param {number} durationSeconds
  * @param {boolean} isCompleted
- * @returns {Object} Full scorecard
+ * @param {number} totalQuestionsTarget
+ * @returns {Object} Complete scorecard
  */
-export function calculateScorecard(answers, durationSeconds = 0, isCompleted = true, totalQuestionsTarget = TOTAL_QUESTIONS_PER_ROUND) {
+export function calculateScorecard(
+  answers = [], 
+  durationSeconds = 0, 
+  isCompleted = true, 
+  totalQuestionsTarget = TOTAL_QUESTIONS_PER_ROUND
+) {
   const answeredCount = answers.length;
   const correctCount = answers.filter(a => a.isCorrect).length;
   const incorrectCount = answeredCount - correctCount;
-
-  const maxPossibleScore = (totalQuestionsTarget * POINTS_PER_CORRECT) + COMPLETION_BONUS;
-
-  // Points calculation
-  const rawPoints = correctCount * POINTS_PER_CORRECT;
-  const completionBonusAwarded = isCompleted && answeredCount >= totalQuestionsTarget ? COMPLETION_BONUS : 0;
-  const totalPoints = rawPoints + completionBonusAwarded;
-
+  const totalPoints = correctCount * POINTS_PER_CORRECT;
   const accuracyPercent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
 
-  // Topic breakdown
+  // Group performance by topic
   const topicBreakdown = {};
   answers.forEach(a => {
-    if (!topicBreakdown[a.topic]) {
-      topicBreakdown[a.topic] = { total: 0, correct: 0 };
+    const topic = a.topic || 'Metabolic Science';
+    if (!topicBreakdown[topic]) {
+      topicBreakdown[topic] = { total: 0, correct: 0 };
     }
-    topicBreakdown[a.topic].total += 1;
+    topicBreakdown[topic].total += 1;
     if (a.isCorrect) {
-      topicBreakdown[a.topic].correct += 1;
+      topicBreakdown[topic].correct += 1;
     }
   });
 
-  // Archetype determination based on accuracy tier
+  // Archetype selection matching the 3 friendly result labels
   let archetype;
-  if (accuracyPercent === 100) {
-    archetype = ARCHETYPES[0]; // Metabolic Scholar
-  } else if (accuracyPercent >= 80) {
-    archetype = ARCHETYPES[1]; // Metabolic Explorer
-  } else if (accuracyPercent >= 60) {
-    archetype = ARCHETYPES[2]; // Science Seeker
-  } else if (accuracyPercent >= 40) {
-    archetype = ARCHETYPES[3]; // Knowledge Builder
+  if (totalPoints >= 500) {
+    archetype = ARCHETYPES[0]; // Metabolic Health Enthusiast
+  } else if (totalPoints >= 300) {
+    archetype = ARCHETYPES[1]; // Knowledge Builder
   } else {
-    archetype = ARCHETYPES[4]; // Wellness Curious
+    archetype = ARCHETYPES[2]; // Curious Explorer
   }
 
-  // Specific educational insight based on missed topics
+  // Personalization based on user's answer history
+  // 1. Identify a topic they answered correctly
+  const correctAnswers = answers.filter(a => a.isCorrect);
   const missedAnswers = answers.filter(a => !a.isCorrect);
-  let tailoredInsight = 'Remarkable performance! You demonstrated a complete command of metabolic science fundamentals.';
-  
+
+  const strengthTopic = correctAnswers.length > 0 
+    ? correctAnswers[0].topic 
+    : 'Metabolic Curiosity';
+
+  // 2. Suggest one topic they could explore further
+  let topicToExplore = 'How Clinicians Use Context & Measurements';
+  let relevantFact = 'Metabolic health involves multiple interacting markers (blood sugar, lipids, blood pressure) rather than any single measurement like scale weight alone.';
+
   if (missedAnswers.length > 0) {
-    const firstMissed = missedAnswers[0];
-    if (firstMissed.topic && firstMissed.topic.includes('Sleep')) {
-      tailoredInsight = 'Insight to explore: Sleep architecture directly impacts your hormones. Even one night of restricted rest temporarily decreases insulin sensitivity by up to 20-30%.';
-    } else if (firstMissed.topic && firstMissed.topic.includes('Movement')) {
-      tailoredInsight = 'Insight to explore: Skeletal muscle acts as your body\'s primary glucose sink, taking in up to 80% of post-meal blood sugar through movement.';
-    } else if (firstMissed.topic && firstMissed.topic.includes('Nutrition')) {
-      tailoredInsight = 'Insight to explore: Soluble dietary fiber feeds beneficial gut microbes that naturally trigger satiety hormones (GLP-1 and PYY) while moderating glucose spikes.';
-    } else if (firstMissed.topic && (firstMissed.topic.includes('Lipids') || firstMissed.topic.includes('Biomarkers'))) {
-      tailoredInsight = 'Insight to explore: A high Triglyceride-to-HDL ratio often signals underlying insulin resistance more accurately than total cholesterol alone.';
-    } else {
-      tailoredInsight = 'Insight to explore: Metabolic health is about cellular energy efficiency and adaptability across organs, rather than scale weight alone.';
-    }
+    topicToExplore = missedAnswers[0].topic;
+    relevantFact = missedAnswers[0].explanation || relevantFact;
+  } else if (correctAnswers.length > 0) {
+    // If all correct, pick an advanced topic to deepen learning
+    topicToExplore = 'Vascular & Circadian Dynamics';
+    relevantFact = 'Combining resistance training with post-meal ambulation engages non-insulin GLUT4 transporters, taking up to 80% of circulating glucose into skeletal muscle.';
   }
 
   return {
     totalPoints,
-    maxScore: maxPossibleScore,
+    maxScore: MAX_SCORE,
     correctCount,
     incorrectCount,
     totalQuestions: totalQuestionsTarget,
     durationSeconds,
     isCompleted,
-    completionBonusAwarded,
     accuracyPercent,
     archetype,
     topicBreakdown,
-    tailoredInsight
+    personalization: {
+      strengthTopic,
+      topicToExplore,
+      relevantFact,
+      recommendation: 'Replay another quest! With our 16-question evidence bank, each playthrough selects fresh topics to broaden your metabolic literacy.'
+    },
+    educationalNotice: 'This score measures quiz performance and concept familiarity only. It does not measure or infer your personal health status, disease risk, or clinical requirements.'
   };
 }

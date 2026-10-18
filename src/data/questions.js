@@ -1,260 +1,320 @@
 /**
  * MetaboQuest Question Bank
- * Medically responsible, evidence-informed metabolic health questions.
- * Sources: CDC, NIH, American Diabetes Association (ADA), American Heart Association (AHA), 
- * Lancet Diabetes & Endocrinology, Nature Metabolism.
+ * 
+ * Evidence-informed metabolic health questions grounded in peer-reviewed clinical
+ * publications and guidelines from CDC, NIDDK, MedlinePlus, WHO, AHA, and ADA.
+ * 
+ * Each question includes:
+ * - Clear question prompt
+ * - Balanced answer options
+ * - Designated correct answer
+ * - A friendly, supportive explanation
+ * - A guiding hint ("Not sure? Give me a hint")
+ * - Source title and direct authoritative URL
+ * - Topic label and difficulty
  */
 
 export const TOPICS = {
-  SLEEP: 'Sleep & Circadian Biology',
-  MOVEMENT: 'Physical Activity & Muscle',
-  NUTRITION: 'Nutrition & Dietary Fiber',
-  GLUCOSE: 'Blood Glucose Regulation',
-  BIOMARKERS: 'Lipids & Vascular Health',
-  GENERAL: 'Metabolic System Science'
+  WHAT_IS_METABOLISM: 'What Metabolic Health Means',
+  GLUCOSE_ENERGY: 'Blood Glucose & Energy',
+  BLOOD_PRESSURE: 'Blood Pressure & Cardiovascular Health',
+  LIPIDS: 'Blood Lipids & Cardiovascular Health',
+  SLEEP_MOVEMENT: 'Sleep, Physical Activity, & Wellbeing',
+  SINGLE_MEASUREMENT: 'Why a Single Measurement Cannot Describe Overall Health',
+  CLINICAL_CONTEXT: 'How Clinicians Use Context & Measurements',
+  EDUCATION_VS_CLINICAL: 'General Education vs Medical Assessment'
 };
 
 export const QUESTIONS_BANK = [
   {
-    id: 'q1_fiber_glucose',
-    topic: TOPICS.NUTRITION,
-    difficulty: 'Medium',
-    question: 'How does soluble dietary fiber help moderate post-meal blood glucose spikes?',
+    id: 'q1_metabolic_definition',
+    topic: TOPICS.WHAT_IS_METABOLISM,
+    difficulty: 'Easy',
+    question: 'Which of the following best describes what "metabolic health" actually means biologically?',
     options: [
-      { id: 'a', text: 'It completely blocks all carbohydrate absorption in the stomach' },
-      { id: 'b', text: 'It forms a viscous gel in the gut that slows gastric emptying and nutrient absorption' },
-      { id: 'c', text: 'It instantly converts blood glucose directly into glycogen in the mouth' },
-      { id: 'd', text: 'It suppresses natural insulin secretion entirely' }
+      { id: 'a', text: 'Having a body weight under a certain arbitrary number on the scale' },
+      { id: 'b', text: 'The flexible, efficient biochemical handling and distribution of energy across organs' },
+      { id: 'c', text: 'Eliminating all carbohydrates from your diet forever' },
+      { id: 'd', text: 'Achieving a completely zero-fat body composition' }
     ],
     correctAnswerId: 'b',
-    explanation: 'Soluble fiber (found in oats, legumes, and flax) dissolves in water to create a viscous gel in the digestive tract. This slows gastric emptying and carbohydrate breakdown, resulting in a gradual, steadier release of glucose into the bloodstream rather than a sharp spike.',
-    source: 'American Diabetes Association (ADA) Nutrition Consensus Report / NIH National Library of Medicine'
+    hint: 'Think about how cells across your muscles, brain, heart, and liver convert and route fuel throughout the day rather than just external appearance.',
+    explanation: 'Metabolic health refers to how efficiently and flexibly your body processes, stores, and mobilizes macronutrients into usable cellular energy (ATP) without chronic cellular stress, systemic inflammation, or vascular dysfunction.',
+    sourceTitle: 'MedlinePlus (NIH): Metabolic Syndrome & Energy Handling',
+    sourceUrl: 'https://medlineplus.gov/metabolicsyndrome.html'
   },
   {
-    id: 'q2_muscle_glucose',
-    topic: TOPICS.MOVEMENT,
+    id: 'q2_muscle_glucose_sink',
+    topic: TOPICS.GLUCOSE_ENERGY,
     difficulty: 'Easy',
-    question: 'Why are skeletal muscles often called the body\'s "primary glucose sink"?',
+    question: 'Why are skeletal muscles frequently referred to in physiology as the body\'s "primary glucose sink"?',
     options: [
-      { id: 'a', text: 'Muscles clear up to 70–80% of circulating post-meal glucose from the bloodstream' },
-      { id: 'b', text: 'Muscles store fat and prevent it from ever entering the liver' },
-      { id: 'c', text: 'Muscle tissue produces glucagon to eliminate excess sugar' },
-      { id: 'd', text: 'Muscles are the only tissue in the human body that can use energy' }
+      { id: 'a', text: 'Muscles absorb roughly 70–80% of circulating post-meal glucose from the bloodstream' },
+      { id: 'b', text: 'Muscle tissue converts sugar directly into bone mineral' },
+      { id: 'c', text: 'Muscles are the only organ in the human body capable of burning energy' },
+      { id: 'd', text: 'Muscles store fat and completely prevent it from entering circulation' }
     ],
     correctAnswerId: 'a',
-    explanation: 'Skeletal muscle accounts for roughly 70% to 80% of whole-body insulin-stimulated glucose disposal after meals. Furthermore, muscle contraction during physical activity triggers non-insulin-dependent glucose uptake (via GLUT4 translocation), making regular movement powerful for metabolic balance.',
-    source: 'American Physiological Society / Lancet Diabetes & Endocrinology'
+    hint: 'Consider the massive volume of muscle tissue throughout your body and where dietary carbohydrates go after being broken down into blood sugar.',
+    explanation: 'Skeletal muscle accounts for roughly 70% to 80% of whole-body insulin-stimulated glucose disposal after meals. In addition, physical muscle contraction directly activates GLUT4 glucose transporters even without insulin.',
+    sourceTitle: 'NIDDK: Physical Activity, Insulin Sensitivity, & Blood Glucose',
+    sourceUrl: 'https://www.niddk.nih.gov/health-information/diabetes/overview/diet-eating-physical-activity'
   },
   {
-    id: 'q3_sleep_insulin',
-    topic: TOPICS.SLEEP,
+    id: 'q3_sleep_insulin_sensitivity',
+    topic: TOPICS.SLEEP_MOVEMENT,
     difficulty: 'Medium',
-    question: 'What acute metabolic effect typically occurs after just one night of partial sleep deprivation (4 hours)?',
+    question: 'What acute metabolic shift typically occurs after just one night of partial sleep restriction (e.g., 4 hours)?',
     options: [
-      { id: 'a', text: 'Insulin sensitivity temporarily improves by 40%' },
+      { id: 'a', text: 'Cellular insulin sensitivity temporarily improves by 40%' },
       { id: 'b', text: 'Metabolic rate permanently doubles to compensate' },
-      { id: 'c', text: 'Temporary, reversible insulin resistance increases and daytime cortisol rises' },
-      { id: 'd', text: 'The liver ceases all endogenous glucose production' }
+      { id: 'c', text: 'Temporary, reversible insulin resistance increases and daytime stress hormones rise' },
+      { id: 'd', text: 'The liver completely stops producing any glucose' }
     ],
     correctAnswerId: 'c',
-    explanation: 'Clinical sleep restriction studies consistently show that even a single night of 4 hours of sleep reduces peripheral insulin sensitivity by 20% to 30%, accompanied by elevated evening cortisol levels and increased sympathetic nervous system activity.',
-    source: 'Annals of Internal Medicine / Endocrine Society Clinical Research'
+    hint: 'Think about how you feel after staying up late: your body\'s stress response stays heightened, which makes cells temporarily less responsive to insulin signals.',
+    explanation: 'Clinical sleep restriction studies consistently show that even a single night of 4 hours of sleep reduces peripheral insulin sensitivity by 20% to 30%, accompanied by elevated evening cortisol levels and sympathetic nervous system activity.',
+    sourceTitle: 'CDC: Sleep and Chronic Disease Overview',
+    sourceUrl: 'https://www.cdc.gov/sleep/about/index.html'
   },
   {
-    id: 'q4_walking_postprandial',
-    topic: TOPICS.MOVEMENT,
+    id: 'q4_walking_post_meal',
+    topic: TOPICS.SLEEP_MOVEMENT,
     difficulty: 'Easy',
-    question: 'What is the metabolic benefit of taking a light 10–15 minute walk shortly after eating a meal?',
+    question: 'What is the metabolic benefit of a gentle 10–15 minute walk shortly after eating a meal?',
     options: [
-      { id: 'a', text: 'It burns 1,000 calories immediately' },
+      { id: 'a', text: 'It burns thousands of calories immediately on the spot' },
       { id: 'b', text: 'Contracting muscle fibers take up circulating glucose with minimal insulin demand' },
-      { id: 'c', text: 'It halts all digestive enzyme production' },
+      { id: 'c', text: 'It completely stops all digestive processes in the stomach' },
       { id: 'd', text: 'It replaces the need for balanced nutrition entirely' }
     ],
     correctAnswerId: 'b',
-    explanation: 'Post-meal (postprandial) ambulation engages major muscle groups like the soleus and quadriceps. Muscle contraction mobilizes GLUT4 glucose transporters directly to cell membranes independently of insulin, attenuating glucose peaks by up to 20-30%.',
-    source: 'Sports Medicine Systematic Review / American Diabetes Association'
+    hint: 'When leg muscles contract, they don\'t have to wait for insulin signals to absorb sugar—they open an alternate cellular doorway.',
+    explanation: 'Gentle ambulation engages major lower-body muscle groups. Muscle contraction mechanically stimulates GLUT4 transporter translocation to cell membranes, smoothing out post-meal glucose excursions by up to 20–30%.',
+    sourceTitle: 'World Health Organization (WHO): Physical Activity Factsheet',
+    sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/physical-activity'
   },
   {
-    id: 'q5_metabolic_definition',
-    topic: TOPICS.GENERAL,
-    difficulty: 'Easy',
-    question: 'Which of the following best describes what "metabolic health" actually means?',
-    options: [
-      { id: 'a', text: 'Having a body weight under a certain arbitrary number on the scale' },
-      { id: 'b', text: 'Never feeling hungry and eliminating all carbohydrates forever' },
-      { id: 'c', text: 'The efficient, adaptable biochemical handling and distribution of energy across organs' },
-      { id: 'd', text: 'Achieving a completely zero-fat body composition' }
-    ],
-    correctAnswerId: 'c',
-    explanation: 'Metabolic health refers to how efficiently and flexibly your body processes, stores, and mobilizes macronutrients into usable energy without chronic cellular stress, systemic inflammation, or vascular dysfunction. It involves blood sugar, lipids, blood pressure, and liver health—not just body weight.',
-    source: 'National Institutes of Health (NIH) / Journal of the American College of Cardiology'
-  },
-  {
-    id: 'q6_triglycerides_hdl',
-    topic: TOPICS.BIOMARKERS,
-    difficulty: 'Hard',
-    question: 'In a standard fasting lipid panel, what does an elevated Triglyceride-to-HDL ratio often indicate?',
-    options: [
-      { id: 'a', text: 'An exceptionally high intake of dietary leafy green vegetables' },
-      { id: 'b', text: 'Surrogate marker of insulin resistance and small, dense LDL particle predominance' },
-      { id: 'c', text: 'Low cellular hydration and high bone mineral density' },
-      { id: 'd', text: 'Immediate acute bacterial infection' }
-    ],
-    correctAnswerId: 'b',
-    explanation: 'When blood triglycerides are high and HDL cholesterol is low, it frequently reflects hepatic insulin resistance and increased atherogenic small, dense LDL particles. A fasting Triglyceride/HDL ratio (in mg/dL) > 3.0 is a recognized surrogate marker of metabolic dysregulation.',
-    source: 'Circulation (American Heart Association) / Mayo Clinic Proceedings'
-  },
-  {
-    id: 'q7_visceral_vs_subcutaneous',
-    topic: TOPICS.GENERAL,
+    id: 'q5_fiber_glycemic_response',
+    topic: TOPICS.GLUCOSE_ENERGY,
     difficulty: 'Medium',
-    question: 'What distinguishes visceral adipose tissue (internal organ fat) from subcutaneous fat (under the skin)?',
+    question: 'How does soluble dietary fiber help moderate post-meal blood glucose rises?',
     options: [
-      { id: 'a', text: 'Visceral fat has no blood flow and does not interact with hormones' },
-      { id: 'b', text: 'Visceral fat is biologically inert cushioning that cannot release fatty acids' },
-      { id: 'c', text: 'Visceral fat is endocrine-active, draining inflammatory cytokines directly to the liver via portal circulation' },
-      { id: 'd', text: 'Subcutaneous fat causes 100% of cardiovascular disease' }
-    ],
-    correctAnswerId: 'c',
-    explanation: 'Visceral fat surrounds abdominal organs and drains directly into the portal vein. It is hyper-lipolytic and releases pro-inflammatory adipokines (like TNF-alpha and IL-6) and free fatty acids straight to the liver, contributing to hepatic insulin resistance.',
-    source: 'The Lancet Diabetes & Endocrinology / Nature Reviews Endocrinology'
-  },
-  {
-    id: 'q8_circadian_meal_timing',
-    topic: TOPICS.SLEEP,
-    difficulty: 'Medium',
-    question: 'Why does human glucose tolerance naturally decline late at night compared to morning hours?',
-    options: [
-      { id: 'a', text: 'The pancreas shuts down all insulin receptors when darkness falls' },
-      { id: 'b', text: 'Circadian melatonin secretion inhibits pancreatic insulin secretion, while central clocks lower peripheral sensitivity' },
-      { id: 'c', text: 'Stomach acid ceases production at 8:00 PM' },
-      { id: 'd', text: 'Blood circulation slows down to a near stop during sleep' }
-    ],
-    correctAnswerId: 'b',
-    explanation: 'Central circadian clocks regulate daily endocrine rhythms. Evening rise in melatonin interacts with MT1/MT2 receptors on pancreatic beta-cells, dampening insulin secretion. Consuming large high-glycemic meals right before bed often produces higher, prolonged glucose elevations.',
-    source: 'Cell Metabolism / Harvard Medical School Circadian Biology Laboratory'
-  },
-  {
-    id: 'q9_continuous_glucose_myths',
-    topic: TOPICS.GLUCOSE,
-    difficulty: 'Medium',
-    question: 'In healthy non-diabetic adults, what is normal regarding post-meal glucose fluctuations?',
-    options: [
-      { id: 'a', text: 'Blood glucose must stay perfectly flat like a straight line at all times' },
-      { id: 'b', text: 'Any rise above 100 mg/dL indicates irreversible metabolic failure' },
-      { id: 'c', text: 'Transient glucose excursions up to 130–140 mg/dL that return near baseline within 2–3 hours are normal physiologic responses' },
-      { id: 'd', text: 'Healthy bodies convert all meal nutrients into glucose within 60 seconds' }
-    ],
-    correctAnswerId: 'c',
-    explanation: 'In healthy individuals, transient rises in blood glucose after meals are completely physiological and expected. Normal regulation clears glucose back to resting baseline (typically 70–99 mg/dL) within 2 to 3 hours through balanced insulin release and tissue uptake.',
-    source: 'American Diabetes Association (ADA) Clinical Guidelines'
-  },
-  {
-    id: 'q10_protein_satiety',
-    topic: TOPICS.NUTRITION,
-    difficulty: 'Easy',
-    question: 'Through which physiologic mechanisms does adequate dietary protein support metabolic satiety?',
-    options: [
-      { id: 'a', text: 'It completely disables all ghrelin receptors forever' },
-      { id: 'b', text: 'It stimulates satiety hormones (PYY, GLP-1) and has a higher thermic effect of food (TEF)' },
-      { id: 'c', text: 'It turns directly into stored body fat faster than any other nutrient' },
-      { id: 'd', text: 'It neutralizes stomach acid to prevent digestion' }
-    ],
-    correctAnswerId: 'b',
-    explanation: 'Dietary protein stimulates the release of satiety gut hormones peptide YY (PYY) and GLP-1 from intestinal L-cells while suppressing ghrelin (hunger hormone). Furthermore, protein has the highest thermic effect of food (~20-30% of energy expended in metabolizing it).',
-    source: 'American Journal of Clinical Nutrition / Nature Metabolism'
-  },
-  {
-    id: 'q11_insulin_resistance_mechanics',
-    topic: TOPICS.GLUCOSE,
-    difficulty: 'Hard',
-    question: 'What cellular hallmark is strongly linked with early skeletal muscle insulin resistance?',
-    options: [
-      { id: 'a', text: 'Accumulation of intramyocellular lipid intermediates (diacylglycerols and ceramides) interfering with insulin signaling cascades' },
-      { id: 'b', text: 'Complete death of 90% of muscle fibers' },
-      { id: 'c', text: 'Excessive consumption of plain drinking water' },
-      { id: 'd', text: 'Lack of vitamin C in red blood cells' }
+      { id: 'a', text: 'It forms a viscous gel in the digestive tract that slows gastric emptying and carbohydrate absorption' },
+      { id: 'b', text: 'It permanently blocks all calorie absorption in the stomach' },
+      { id: 'c', text: 'It instantly converts blood glucose directly into glycogen in the mouth' },
+      { id: 'd', text: 'It prevents the pancreas from making any hormones' }
     ],
     correctAnswerId: 'a',
-    explanation: 'When energy intake chronically exceeds storage capacity, ectopic fat metabolites (diacylglycerols and ceramides) accumulate inside muscle and liver cells. These activate protein kinase C (PKC), which impairs IRS-1 phosphorylation and blocks GLUT4 translocation to the cell surface.',
-    source: 'New England Journal of Medicine / Cell Metabolism'
+    hint: 'Think about what happens when oats or chia seeds mix with water—they absorb fluid and create a thicker texture that travels more gradually through the stomach.',
+    explanation: 'Soluble fiber dissolves in water to form a gel-like substance in the digestive tract. This delays gastric emptying and slows carbohydrate breakdown, leading to a steady, gradual release of glucose into the bloodstream.',
+    sourceTitle: 'MedlinePlus: Dietary Fiber and Metabolic Health',
+    sourceUrl: 'https://medlineplus.gov/dietaryfiber.html'
   },
   {
-    id: 'q12_blood_pressure_metabolic',
-    topic: TOPICS.BIOMARKERS,
+    id: 'q6_triglycerides_hdl_ratio',
+    topic: TOPICS.LIPIDS,
+    difficulty: 'Hard',
+    question: 'In routine fasting blood lipid panels, what does an elevated Triglyceride-to-HDL ratio often indicate to clinicians?',
+    options: [
+      { id: 'a', text: 'A surrogate marker of insulin resistance and higher presence of small, dense LDL particles' },
+      { id: 'b', text: 'An exceptionally high intake of leafy green vegetables' },
+      { id: 'c', text: 'Extreme cellular dehydration and high bone mineral density' },
+      { id: 'd', text: 'An immediate acute bacterial infection' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'High triglycerides coupled with low HDL ("good" cholesterol) reflects how the liver packages and clears fat particles when insulin signaling is blunted.',
+    explanation: 'When blood triglycerides are high and HDL cholesterol is low, it frequently reflects hepatic insulin resistance and increased atherogenic small, dense LDL particles. A fasting Triglyceride/HDL ratio (in mg/dL) > 3.0 is a recognized surrogate marker of metabolic dysregulation.',
+    sourceTitle: 'MedlinePlus Medical Encyclopedia: Triglycerides',
+    sourceUrl: 'https://medlineplus.gov/triglycerides.html'
+  },
+  {
+    id: 'q7_blood_pressure_insulin',
+    topic: TOPICS.BLOOD_PRESSURE,
     difficulty: 'Medium',
     question: 'How is chronically elevated insulin (hyperinsulinemia) physiologically linked with blood pressure regulation?',
     options: [
-      { id: 'a', text: 'It has zero relationship; blood pressure is strictly genetic' },
-      { id: 'b', text: 'Insulin stimulates renal sodium retention and sympathetic nervous system tone while blunting nitric oxide vasodilation' },
+      { id: 'a', text: 'There is zero link; blood pressure is completely unrelated to hormones' },
+      { id: 'b', text: 'Insulin enhances renal sodium reabsorption and sympathetic tone while blunting nitric oxide vasodilation' },
       { id: 'c', text: 'Insulin permanently thins blood vessels until they collapse' },
-      { id: 'd', text: 'Insulin converts all blood into lymphatic fluid' }
+      { id: 'd', text: 'Insulin converts red blood cells into lymphatic fluid' }
     ],
     correctAnswerId: 'b',
-    explanation: 'Insulin acts on renal tubules to enhance sodium and water reabsorption. In the presence of vascular insulin resistance, insulin\'s ability to stimulate nitric oxide-mediated vasodilation is impaired while its activation of the sympathetic nervous system persists, contributing to elevated blood pressure.',
-    source: 'Hypertension (AHA Journal) / Journal of Clinical Investigation'
+    hint: 'Insulin interacts with the kidneys (salt management) and the inner lining of blood vessels (vasodilation). When insulin resistance occurs, vessel relaxation becomes harder.',
+    explanation: 'Insulin signals the kidneys to reabsorb sodium and water. In the setting of vascular insulin resistance, insulin\'s ability to stimulate nitric oxide vasodilation is reduced while sympathetic stimulation continues, contributing to elevated blood pressure.',
+    sourceTitle: 'CDC: High Blood Pressure (Hypertension) Overview',
+    sourceUrl: 'https://www.cdc.gov/high-blood-pressure/about/index.html'
   },
   {
-    id: 'q13_fermented_foods_microbiome',
-    topic: TOPICS.NUTRITION,
-    difficulty: 'Medium',
-    question: 'What did a landmark Stanford School of Medicine randomized trial discover about diets high in fermented foods?',
-    options: [
-      { id: 'a', text: 'They caused severe loss of all gut bacteria' },
-      { id: 'b', text: 'They increased gut microbiome diversity and decreased 19 inflammatory blood markers' },
-      { id: 'c', text: 'They only affected tongue tastebuds without systemic impact' },
-      { id: 'd', text: 'They replaced the need for sleep' }
-    ],
-    correctAnswerId: 'b',
-    explanation: 'A 2021 Stanford clinical trial (published in Cell) demonstrated that a 10-week diet rich in fermented foods (kefir, yogurt, kimchi, kombucha) steadily expanded microbiota diversity and significantly decreased 19 circulating inflammatory proteins, including IL-6.',
-    source: 'Wastyk et al., Cell (2021) / Stanford Medicine Research'
-  },
-  {
-    id: 'q14_chronic_stress_cortisol',
-    topic: TOPICS.GENERAL,
+    id: 'q8_bmi_single_measurement',
+    topic: TOPICS.SINGLE_MEASUREMENT,
     difficulty: 'Easy',
-    question: 'Why can prolonged psychological stress impair metabolic health even when diet remains unchanged?',
+    question: 'Why can Body Mass Index (BMI) alone NOT tell you whether a specific individual is metabolically healthy?',
     options: [
-      { id: 'a', text: 'Sustained cortisol promotes hepatic gluconeogenesis (sugar production) and visceral fat storage' },
-      { id: 'b', text: 'Stress burns all cellular ATP and turns muscle into water' },
-      { id: 'c', text: 'Stress eliminates red blood cell oxygenation' },
-      { id: 'd', text: 'Stress has no biochemical influence on human metabolism' }
+      { id: 'a', text: 'BMI only compares weight to height; it does not distinguish muscle from visceral fat or measure blood markers' },
+      { id: 'b', text: 'BMI is only calculated for children and cannot be used in adults' },
+      { id: 'c', text: 'BMI is a measurement of lung capacity rather than body composition' },
+      { id: 'd', text: 'BMI is calculated based entirely on eye color and genetics' }
     ],
     correctAnswerId: 'a',
-    explanation: 'Cortisol is an essential glucocorticoid survival hormone. In chronic stress, persistent cortisol elevates liver glucose output, suppresses peripheral glucose uptake, and upregulates lipoprotein lipase in visceral fat depots, driving central adiposity.',
-    source: 'Psychoneuroendocrinology / Endocrine Reviews'
+    hint: 'A muscular athlete and an inactive individual could have the exact same height and weight, but totally different biomarker profiles.',
+    explanation: 'BMI is a simple population screening ratio. It cannot differentiate between lean muscle mass and visceral abdominal adipose tissue, nor does it measure blood glucose, lipids, liver enzymes, or blood pressure.',
+    sourceTitle: 'CDC: Adult Body Mass Index (BMI) Considerations',
+    sourceUrl: 'https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html'
   },
   {
-    id: 'q15_aerobic_vs_resistance',
-    topic: TOPICS.MOVEMENT,
+    id: 'q9_a1c_vs_fingerstick',
+    topic: TOPICS.CLINICAL_CONTEXT,
     difficulty: 'Medium',
-    question: 'What makes combining both resistance training and aerobic exercise optimal for metabolic resilience?',
+    question: 'Why do healthcare providers check Glycated Hemoglobin (HbA1c) in addition to momentary fasting blood glucose?',
     options: [
-      { id: 'a', text: 'One burns fat while the other completely burns muscle away' },
-      { id: 'b', text: 'Resistance training expands total glucose storage reservoir (muscle mass), while aerobic training enhances mitochondrial oxidative capacity and capillary density' },
-      { id: 'c', text: 'Doing both confuses the metabolic system into resetting itself to infancy' },
-      { id: 'd', text: 'They must never be combined on the same calendar month' }
+      { id: 'a', text: 'A1C reflects average blood sugar over 2–3 months, whereas fasting glucose is just a single snapshot in time' },
+      { id: 'b', text: 'A1C measures the exact number of heartbeats over a year' },
+      { id: 'c', text: 'Fasting glucose is always 100% inaccurate on Tuesdays' },
+      { id: 'd', text: 'A1C tests whether someone needs eyeglasses' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'Glucose in your blood attaches to hemoglobin in red blood cells. Since red blood cells live for about 3 months, they carry a running record of glucose exposure.',
+    explanation: 'As red blood cells circulate, glucose molecules bind to hemoglobin. An HbA1c test measures the percentage of hemoglobin proteins glycated with sugar, reflecting glycemic control across the ~90-to-120-day lifespan of red blood cells.',
+    sourceTitle: 'NIDDK: The A1C Test & Diabetes Diagnosis',
+    sourceUrl: 'https://www.niddk.nih.gov/health-information/diagnostic-tests/a1c-test'
+  },
+  {
+    id: 'q10_education_vs_clinical_assessment',
+    topic: TOPICS.EDUCATION_VS_CLINICAL,
+    difficulty: 'Easy',
+    question: 'What is the essential difference between an interactive educational quiz and a clinical medical assessment?',
+    options: [
+      { id: 'a', text: 'Educational tools teach general concepts, whereas clinical care requires individual health history, physical exams, and lab evaluation by a licensed clinician' },
+      { id: 'b', text: 'An educational quiz score is legally binding proof of a disease' },
+      { id: 'c', text: 'Doctors always use five-question online quizzes to prescribe prescription therapies' },
+      { id: 'd', text: 'There is no difference; quiz scores can replace annual medical checkups' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'No online tool knows your family medical history, personal physical exam findings, or validated laboratory results.',
+    explanation: 'Educational experiences like MetaboQuest build literacy around human biology. Clinical diagnoses and medical decisions require personalized evaluation, validated laboratory tests, and direct consultation with a qualified medical professional.',
+    sourceTitle: 'MedlinePlus: Understanding Diagnostic Tests & Lab Work',
+    sourceUrl: 'https://medlineplus.gov/lab-tests/'
+  },
+  {
+    id: 'q11_normal_glucose_fluctuations',
+    topic: TOPICS.GLUCOSE_ENERGY,
+    difficulty: 'Medium',
+    question: 'In healthy non-diabetic adults, what is considered a normal physiologic glucose response after eating a meal?',
+    options: [
+      { id: 'a', text: 'Blood glucose must stay as a completely flat straight line at all times' },
+      { id: 'b', text: 'Transient glucose rises that return toward fasting baseline within 2–3 hours are normal and expected' },
+      { id: 'c', text: 'Any rise above 100 mg/dL indicates irreversible metabolic failure' },
+      { id: 'd', text: 'Healthy bodies convert all nutrients into energy in under 10 seconds' }
     ],
     correctAnswerId: 'b',
-    explanation: 'Resistance training builds lean muscle tissue (expanding the total capacity for glucose disposal), whereas aerobic conditioning increases capillary perfusion and mitochondrial density/efficiency within muscle fibers. Combined, they yield superior glycemic control compared to either alone.',
-    source: 'JAMA / American College of Sports Medicine (ACSM)'
+    hint: 'Eating foods that contain carbohydrates naturally releases glucose into your bloodstream; your pancreas and tissues respond to bring it back to baseline within hours.',
+    explanation: 'Mild, temporary rises in blood glucose after meals are normal physiological reactions. In healthy regulation, the pancreas secretes insulin and tissues clear glucose back to resting levels (typically 70–99 mg/dL) within 2 to 3 hours.',
+    sourceTitle: 'MedlinePlus: Blood Glucose Monitoring and Normal Values',
+    sourceUrl: 'https://medlineplus.gov/bloodglucose.html'
+  },
+  {
+    id: 'q12_visceral_vs_subcutaneous_fat',
+    topic: TOPICS.SINGLE_MEASUREMENT,
+    difficulty: 'Medium',
+    question: 'What makes visceral adipose tissue (internal fat surrounding organs) metabolically distinct from subcutaneous fat (under the skin)?',
+    options: [
+      { id: 'a', text: 'Visceral fat is biologically active, releasing free fatty acids and inflammatory cytokines directly into the liver\'s portal circulation' },
+      { id: 'b', text: 'Visceral fat has no blood flow and cannot interact with hormones' },
+      { id: 'c', text: 'Visceral fat is completely harmless inert cushioning' },
+      { id: 'd', text: 'Subcutaneous fat causes 100% of all cardiovascular complications' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'Visceral fat drains directly into the portal vein heading straight to the liver, impacting liver insulin sensitivity much more directly than fat under the skin.',
+    explanation: 'Visceral fat is endocrine-active and hyper-lipolytic. It releases pro-inflammatory adipokines and free fatty acids directly into the portal vein leading to the liver, contributing to hepatic insulin resistance and dyslipidemia.',
+    sourceTitle: 'NIDDK: Insulin Resistance & Prediabetes Overview',
+    sourceUrl: 'https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-type-2-diabetes/prediabetes-insulin-resistance'
+  },
+  {
+    id: 'q13_circadian_evening_metabolism',
+    topic: TOPICS.SLEEP_MOVEMENT,
+    difficulty: 'Medium',
+    question: 'Why does human glucose tolerance naturally diminish late in the evening compared to morning hours?',
+    options: [
+      { id: 'a', text: 'The nocturnal rise in melatonin interacts with receptors on pancreatic beta-cells, lowering insulin secretion' },
+      { id: 'b', text: 'Stomach acid ceases completely when the sun goes down' },
+      { id: 'c', text: 'Blood circulation comes to an almost complete stop at night' },
+      { id: 'd', text: 'The pancreas only operates between 9:00 AM and 5:00 PM' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'Your body\'s internal biological clock anticipates rest and fasting during darkness, coordinating hormone rhythms accordingly.',
+    explanation: 'Central circadian clocks regulate daily endocrine rhythms. The evening surge in melatonin binds to MT1/MT2 receptors on pancreatic beta-cells, dampening insulin secretion. Late-night heavy meals therefore tend to cause higher and prolonged glucose curves.',
+    sourceTitle: 'CDC: Sleep and Health Overview',
+    sourceUrl: 'https://www.cdc.gov/sleep/about/index.html'
+  },
+  {
+    id: 'q14_lifestyle_synergy',
+    topic: TOPICS.WHAT_IS_METABOLISM,
+    difficulty: 'Easy',
+    question: 'Why does improving metabolic health typically involve a combination of sleep, movement, and nutrition rather than a single "magic bullet"?',
+    options: [
+      { id: 'a', text: 'Metabolism is an interconnected multi-organ system where sleep resets hormones, movement clears glucose, and nutrition fuels cellular repair' },
+      { id: 'b', text: 'Because single habits cancel each other out completely' },
+      { id: 'c', text: 'Because human cells only accept one type of nutrient per decade' },
+      { id: 'd', text: 'It does not; single supplements solve all metabolic challenges' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'Consider how sleep affects your appetite hormones, how muscle movement disposes of glucose, and how whole foods nurture the gut microbiome.',
+    explanation: 'Metabolic health is the emergent outcome of multiple interacting biological systems. Sleep maintains hormonal balance, physical movement mobilizes non-insulin glucose uptake, and balanced nutrition provides substrates for cellular metabolism without excessive stress.',
+    sourceTitle: 'WHO: Healthy Diet and Chronic Disease Prevention',
+    sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet'
+  },
+  {
+    id: 'q15_clinical_context_evaluation',
+    topic: TOPICS.CLINICAL_CONTEXT,
+    difficulty: 'Hard',
+    question: 'When a physician evaluates metabolic health, why do they examine a combination of fasting glucose, blood pressure, lipids, and waist circumference together?',
+    options: [
+      { id: 'a', text: 'These five criteria evaluate metabolic syndrome, identifying systemic risk patterns rather than relying on one isolated number' },
+      { id: 'b', text: 'Because each test only takes 1 millisecond and has no clinical meaning' },
+      { id: 'c', text: 'To calculate an arbitrary mathematical score for insurance purposes' },
+      { id: 'd', text: 'Because doctors are legally prohibited from looking at only one lab test' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'Metabolic syndrome is defined by clustering factors: blood pressure, triglycerides, HDL, fasting blood sugar, and waist measurement.',
+    explanation: 'Clinical guidelines define metabolic syndrome by a cluster of five cardiometabolic risk factors. Evaluating these markers collectively gives clinicians a much more comprehensive view of vascular and metabolic resilience than any single metric.',
+    sourceTitle: 'MedlinePlus: Metabolic Syndrome Clinical Criteria',
+    sourceUrl: 'https://medlineplus.gov/metabolicsyndrome.html'
+  },
+  {
+    id: 'q16_aerobic_and_resistance_training',
+    topic: TOPICS.SLEEP_MOVEMENT,
+    difficulty: 'Medium',
+    question: 'What is the unique metabolic synergy of combining both resistance training and aerobic exercise?',
+    options: [
+      { id: 'a', text: 'Resistance training expands total glucose storage reservoir (muscle mass), while aerobic training enhances mitochondrial oxidative capacity' },
+      { id: 'b', text: 'One burns only muscle while the other burns only fat' },
+      { id: 'c', text: 'They must never be combined in the same week or metabolism will crash' },
+      { id: 'd', text: 'Resistance training eliminates the need for oxygen intake' }
+    ],
+    correctAnswerId: 'a',
+    hint: 'One builds the capacity of the storage reservoir, while the other increases the density and efficiency of cellular powerplants (mitochondria).',
+    explanation: 'Resistance exercise builds and preserves lean muscle tissue (expanding whole-body glucose disposal capacity), whereas aerobic conditioning increases capillary perfusion and mitochondrial density within muscle fibers. Combined, they provide optimal glycemic and cardiovascular benefits.',
+    sourceTitle: 'WHO: Physical Activity Recommendations for Adults',
+    sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/physical-activity'
   }
 ];
 
 // Single sample question for the interactive preview on the landing page
 export const PREVIEW_QUESTION = {
   id: 'preview_soleus_pushup',
-  topic: TOPICS.MOVEMENT,
+  topic: TOPICS.SLEEP_MOVEMENT,
   difficulty: 'Quick Discovery',
-  question: 'Did you know? Sitting calf raises (activating the soleus muscle) can elevate local oxidative metabolism for hours while seated. Why is the soleus unique?',
+  question: 'Did you know? Light muscular contractions (like a 10-minute walk or seated calf raises) can smooth post-meal blood sugar. Why is muscle contraction so effective?',
   options: [
-    { id: 'a', text: 'It relies predominantly on blood glucose and circulating lipids rather than depleting intramuscular glycogen' },
-    { id: 'b', text: 'It burns more calories per minute than an Olympic sprint' },
-    { id: 'c', text: 'It does not require any oxygen to produce energy' },
-    { id: 'd', text: 'It operates without any connection to the circulatory system' }
+    { id: 'a', text: 'Contracting muscle fibers take up circulating blood glucose directly without depending on high insulin levels' },
+    { id: 'b', text: 'It burns more calories in 60 seconds than an Olympic sprint' },
+    { id: 'c', text: 'It completely shuts down the human circulatory system' },
+    { id: 'd', text: 'It freezes all digestive enzymes in the stomach' }
   ],
   correctAnswerId: 'a',
-  explanation: 'Groundbreaking research published in iScience (2022) revealed that the soleus muscle possesses a high proportion of slow-twitch oxidative fibers that can sustain continuous energy expenditure utilizing circulating blood glucose and triglycerides for hours with minimal fatigue.',
-  source: 'Hamilton et al., iScience / University of Houston Metabolic Research'
+  hint: 'Muscle contractions use a special transporter called GLUT4 that moves to the cell surface mechanically without needing an insulin key.',
+  explanation: 'Physical muscle contraction triggers GLUT4 glucose transporter translocation directly to muscle cell membranes through non-insulin pathways (via AMPK and calcium signaling), helping clear glucose quickly after eating.',
+  sourceTitle: 'NIDDK: Physical Activity, Insulin Sensitivity, & Blood Glucose',
+  sourceUrl: 'https://www.niddk.nih.gov/health-information/diabetes/overview/diet-eating-physical-activity'
 };

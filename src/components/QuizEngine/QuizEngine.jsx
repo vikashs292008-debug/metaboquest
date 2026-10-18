@@ -74,7 +74,10 @@ export function QuizEngine({
           selectedOptionId={selectedOptionId}
           isAnswerLocked={isAnswerLocked}
           isFeedbackVisible={isFeedbackVisible}
+          isHintVisible={quizState.isHintVisible}
+          showMilestoneToast={quizState.showMilestoneToast}
           onSelectOption={selectOption}
+          onToggleHint={quizState.toggleHint}
           onConfirmAnswer={confirmAnswer}
           onNextQuestion={nextQuestion}
           onSkipQuestion={skipQuestion}

@@ -22,8 +22,10 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run MetaboQuest Verification Test Suite
-        run: node test-suite.mjs
+      - name: Run MetaboQuest Verification Test Suites
+        run: |
+          node test-content-lab.mjs
+          node test-suite.mjs
 
       - name: Build Production Bundle
         run: npm run build

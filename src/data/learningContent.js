@@ -1,127 +1,125 @@
 /**
- * MetaboQuest Learning Library
- * Credible, evidence-informed educational summaries with real medical citations.
+ * MetaboQuest Learning Hub Content
+ * 
+ * Evidence-based educational cards categorized across core metabolic themes:
+ * - The basics
+ * - Glucose and energy
+ * - Heart and blood markers
+ * - Sleep and movement
+ * - Understanding measurements
+ * 
+ * Sources verified against NIDDK, CDC, WHO, and MedlinePlus.
  */
+
+export const LEARNING_CATEGORIES = [
+  'All',
+  'The basics',
+  'Glucose and energy',
+  'Heart and blood markers',
+  'Sleep and movement',
+  'Understanding measurements'
+];
 
 export const LEARNING_TOPICS = [
   {
     id: 'understand-metabolism',
-    category: 'Fundamentals',
+    category: 'The basics',
     title: 'What Metabolic Health Actually Means',
     readTime: '3 min read',
-    summary: 'Metabolism is far more than burning calories or the number on a bathroom scale—it is your body\'s cellular energy network.',
+    plainLanguageExplanation: 'Metabolism is the body\'s cellular energy network—how cells convert food into usable energy, build tissue, and clear waste.',
+    whyItMatters: 'Metabolism is not just about weight or how fast you burn calories. It dictates day-to-day energy, immune function, and organ longevity.',
     content: `Many people view metabolism merely as the speed at which their body burns calories. In clinical biochemistry, metabolism encompasses the entire set of life-sustaining chemical reactions that convert food into cellular energy (ATP), build cellular structures, and eliminate metabolic waste.
 
-Metabolic health describes how smoothly and adaptably your cells handle energy transitions—such as shifting from processing a carbohydrate-rich lunch to mobilizing stored energy between meals or during an evening jog. Crucially, metabolic health cannot be judged by body weight alone: an individual can have a normal body mass index (BMI) while experiencing significant underlying insulin resistance or lipid dysfunction (sometimes termed metabolically obese normal-weight, or MONW).
+Metabolic health describes how smoothly and adaptably your cells handle energy transitions—such as shifting from processing a carbohydrate-rich lunch to mobilizing stored energy between meals or during an evening jog. Crucially, metabolic health cannot be judged by body weight alone: an individual can have a normal body mass index (BMI) while experiencing significant underlying insulin resistance or lipid dysfunction.
 
 Evaluating metabolic resilience involves multiple interconnected markers: fasting glucose, glycated hemoglobin (HbA1c), fasting insulin, triglycerides, HDL cholesterol, resting blood pressure, and waist-to-height ratio.`,
     takeaway: 'Focus on multi-system metabolic markers and daily energy vitality rather than treating scale weight as the sole indicator of health.',
-    sources: [
-      { name: 'National Institutes of Health (NIH) — Metabolic Syndrome Definitions', link: 'https://www.nhlbi.nih.gov/health/metabolic-syndrome' },
-      { name: 'Journal of the American College of Cardiology — Metabolic Flexibility and Health', link: 'https://www.jacc.org' }
-    ]
+    sourceAttribution: 'National Library of Medicine / MedlinePlus: Metabolic Syndrome',
+    learnMoreUrl: 'https://medlineplus.gov/metabolicsyndrome.html'
   },
   {
-    id: 'sleep-metabolism',
-    category: 'Sleep & Rhythm',
-    title: 'Sleep Architecture & Circadian Glucose Control',
+    id: 'glucose-cellular-energy',
+    category: 'Glucose and energy',
+    title: 'Blood Glucose and Cellular Energy Regulation',
     readTime: '4 min read',
-    summary: 'How sleep deprivation, irregular sleep schedules, and nighttime eating interfere with your body\'s insulin signaling.',
-    content: `During restorative slow-wave (deep) sleep, sympathetic nervous system activity quietens, cortisol levels nadir, and growth hormone pulses. This nocturnal reset restores insulin receptor sensitivity across peripheral tissues.
+    plainLanguageExplanation: 'Glucose is the primary fuel circulating in your bloodstream; insulin acts as a biochemical key helping cells absorb it.',
+    whyItMatters: 'When cells become resistant to insulin, the pancreas must produce higher amounts to clear the same glucose, straining metabolic balance.',
+    content: `After carbohydrates are digested, they enter the bloodstream as glucose. The pancreas releases insulin, a peptide hormone that binds to surface receptors on cells (particularly in muscle and adipose tissue), signaling GLUT4 transporter vesicles to move to the cell surface to absorb glucose.
 
-When sleep is restricted—whether chronically or through acute all-nighters—several disruptions occur simultaneously:
-1. Daytime cortisol and sympathetic tone remain elevated.
-2. Free fatty acid levels in blood rise overnight, impeding insulin receptor signaling cascades in muscle cells.
-3. Central and peripheral circadian clocks uncouple. In the late evening, the pineal gland releases melatonin, which binds to beta-cell receptors and naturally downregulates pancreatic insulin output.
+In healthy physiology, temporary post-meal glucose rises are completely normal and return toward baseline within 2 to 3 hours. Insulin resistance develops when cells in muscle, fat, and liver become less responsive to insulin signals, requiring higher circulating insulin levels (compensatory hyperinsulinemia) to achieve the same glucose uptake.
 
-Consequently, eating large, high-glycemic meals late at night conflicts with your evolutionary biology, resulting in substantially higher and prolonged postprandial glucose excursions compared to the exact same meal consumed in the morning.`,
-    takeaway: 'Prioritize consistent sleep timing (7–9 hours) and avoid large meals within 2–3 hours of your intended sleep window.',
-    sources: [
-      { name: 'Annals of Internal Medicine — Metabolic Consequences of Sleep Deprivation', link: 'https://www.acpjournals.org/journal/aim' },
-      { name: 'Cell Metabolism — Circadian Regulation of Glucose and Insulin Homeostasis', link: 'https://www.cell.com/cell-metabolism' }
-    ]
+Dietary fiber—particularly soluble viscous fibers found in oats, legumes, and flax—creates a gel-like matrix that slows carbohydrate breakdown and gastric emptying, promoting a gentle and sustained energy curve.`,
+    takeaway: 'Pair carbohydrates with fiber, protein, and healthy fats to moderate glucose spikes and provide steady, lasting energy.',
+    sourceAttribution: 'NIDDK: Insulin Resistance & Prediabetes Overview',
+    learnMoreUrl: 'https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-type-2-diabetes/prediabetes-insulin-resistance'
   },
   {
-    id: 'movement-glucose',
-    category: 'Movement',
-    title: 'Skeletal Muscle as a Metabolic Powerhouse',
-    readTime: '3 min read',
-    summary: 'Why muscle is your body\'s largest glucose reservoir and how light post-meal movement acts as a natural glucose buffer.',
-    content: `Skeletal muscle accounts for approximately 40% of adult body mass and is responsible for disposing of 70% to 80% of dietary glucose from the bloodstream after meals. 
-
-Under sedentary conditions, getting glucose into muscle cells requires insulin to bind to surface receptors, triggering a cascade that moves GLUT4 transporter proteins to the cell membrane. However, when skeletal muscle fibers contract during physical movement, an entirely distinct, non-insulin-dependent pathway is activated:
-- Cellular AMP-activated protein kinase (AMPK) increases.
-- Intracellular calcium ions flux.
-- GLUT4 vesicles translocate directly to the cell surface without requiring elevated insulin.
-
-This means even modest physical exertion—such as a 10-to-15-minute gentle walk, bodyweight squats, or calf raises after eating—clears circulating glucose quickly, mitigating acute glycemic spikes and sparing pancreatic workload.`,
-    takeaway: 'A short 10-minute walk after meals leverages mechanical muscle contraction to smooth out glucose spikes without taxing your pancreas.',
-    sources: [
-      { name: 'Sports Medicine — Acute Postprandial Exercise and Glycemic Regulation', link: 'https://link.springer.com/journal/40279' },
-      { name: 'Lancet Diabetes & Endocrinology — Physical Inactivity and Insulin Resistance', link: 'https://www.thelancet.com/journals/landia' }
-    ]
-  },
-  {
-    id: 'nutrition-fiber-microbiome',
-    category: 'Nutrition',
-    title: 'Dietary Fiber, Short-Chain Fatty Acids & Satiety',
+    id: 'heart-blood-lipids',
+    category: 'Heart and blood markers',
+    title: 'Lipids, Triglycerides & Cardiovascular Function',
     readTime: '4 min read',
-    summary: 'The difference between soluble and insoluble fiber, microbiome fermentation, and gut hormone secretion.',
-    content: `Dietary fiber is not an inert filler. In humans, dietary fiber passes largely undigested through the upper gastrointestinal tract until it reaches the cecum and colon, where trillions of symbiotic gut microbes ferment it.
-
-This microbial fermentation generates bioactive short-chain fatty acids (SCFAs), predominantly acetate, propionate, and butyrate:
-- Butyrate serves as the primary metabolic fuel for colonic epithelial cells, strengthening gut barrier integrity.
-- Propionate travels to the liver, where it helps regulate gluconeogenesis and cholesterol synthesis.
-- Acetate and other SCFAs bind to free fatty acid receptors (FFAR2 and FFAR3) on enteroendocrine L-cells in the gut wall, triggering secretion of the incretin hormone glucagon-like peptide-1 (GLP-1) and peptide YY (PYY).
-
-Soluble, viscous fibers (beta-glucan in oats, psyllium, pectin in apples, legumes) also form a hydrating matrix that slows gastric emptying and carbohydrate digestion, blunting sharp glucose absorption.`,
-    takeaway: 'Aim for a diverse variety of whole plant foods (legumes, vegetables, seeds, whole grains) to feed gut microbes that stimulate natural GLP-1 and satiety signaling.',
-    sources: [
-      { name: 'American Journal of Clinical Nutrition — Dietary Fiber and Cardiometabolic Health', link: 'https://academic.oup.com/ajcn' },
-      { name: 'Cell — Gut-Microbiota-Targeted Diets and Immune Health (Stanford Study)', link: 'https://www.cell.com/cell' }
-    ]
-  },
-  {
-    id: 'biomarkers-lipids-bp',
-    category: 'Biomarkers',
-    title: 'Decoding Your Biomarkers: Beyond Total Cholesterol',
-    readTime: '5 min read',
-    summary: 'Why Triglyceride/HDL ratios, fasting insulin, and blood pressure tell a richer metabolic story than isolated total numbers.',
-    content: `Routine health checkups often focus on total cholesterol, but modern lipidology and cardiometabolic medicine look much closer at lipoprotein particle quality and ratios:
+    plainLanguageExplanation: 'Triglycerides are blood fats used for stored energy, while HDL particles transport excess cholesterol back to the liver.',
+    whyItMatters: 'A high Triglyceride-to-HDL ratio often provides an earlier signal of insulin resistance and vascular strain than total cholesterol alone.',
+    content: `Routine health checkups often review total cholesterol, but modern lipidology and cardiometabolic medicine examine lipoprotein particle quality and ratios:
 
 1. **Triglyceride-to-HDL Ratio**:
-Elevated blood triglycerides combined with low HDL cholesterol strongly correlate with insulin resistance and the presence of small, dense LDL particles (Pattern B). Small, dense LDL particles are especially prone to oxidation and penetration of arterial endothelium. A Triglycerides/HDL ratio greater than 3.0 (in mg/dL units) is a well-established surrogate clinical indicator.
+Elevated blood triglycerides combined with low HDL cholesterol strongly correlate with hepatic insulin resistance and the presence of small, dense LDL particles. Small, dense LDL particles are especially susceptible to oxidation and penetration of the endothelial arterial wall.
 
 2. **Hyperinsulinemia & Blood Pressure**:
-Insulin resistance in peripheral tissues often leads to compensatory hyperinsulinemia (the pancreas producing more insulin to achieve the same glucose disposal). Insulin naturally promotes sodium reabsorption in the kidneys and stimulates the sympathetic nervous system. When the endothelial lining becomes resistant to insulin\'s nitric oxide vasodilatory signaling, blood vessels fail to relax normally, fostering elevated blood pressure.
+Insulin acts on renal tubules in the kidneys to enhance sodium and water reabsorption. In the presence of vascular insulin resistance, insulin's ability to stimulate nitric oxide-mediated vasodilation is impaired while its activation of the sympathetic nervous system persists, contributing to elevated blood pressure.`,
+    takeaway: 'When reviewing routine labs with your physician, discuss the relationship between triglycerides, HDL, and blood pressure together.',
+    sourceAttribution: 'MedlinePlus Medical Encyclopedia: Triglycerides & Heart Health',
+    learnMoreUrl: 'https://medlineplus.gov/triglycerides.html'
+  },
+  {
+    id: 'sleep-circadian-movement',
+    category: 'Sleep and movement',
+    title: 'Sleep Architecture, Circadian Rhythms & Movement',
+    readTime: '4 min read',
+    plainLanguageExplanation: 'Restorative sleep recalibrates your hormonal balance, while muscle movement clears glucose independently of insulin.',
+    whyItMatters: 'Even one night of poor sleep can temporarily reduce insulin sensitivity, while a 10-minute walk after eating dramatically blunts glucose spikes.',
+    content: `During restorative slow-wave sleep, sympathetic nervous system activity quietens, nighttime cortisol levels decrease, and growth hormone pulses to repair tissues. When sleep is cut short, daytime cortisol remains elevated and free fatty acids in the blood rise, making cells temporarily less responsive to insulin.
 
-3. **Glycated Hemoglobin (HbA1c)**:
-While fasting glucose captures a single snapshot in time, HbA1c measures the percentage of hemoglobin proteins coated in sugar, reflecting average blood glucose levels across the lifespan of red blood cells (~90–120 days).`,
-    takeaway: 'When reviewing routine lab work with your physician, ask to discuss patterns across triglycerides, HDL, fasting glucose, and blood pressure as a cohesive whole.',
-    sources: [
-      { name: 'Circulation (American Heart Association) — Triglyceride/HDL Index', link: 'https://www.ahajournals.org/journal/circ' },
-      { name: 'American Diabetes Association (ADA) — Standards of Care in Diabetes', link: 'https://diabetesjournals.org/care' }
-    ]
+Furthermore, our bodies follow internal circadian clocks. As evening progresses, the pineal gland secretes melatonin, which interacts with receptors on pancreatic beta-cells to downregulate insulin secretion. Consuming large high-glycemic meals right before bed conflicts with this nocturnal slowdown.
+
+Conversely, engaging skeletal muscles—such as a 10-to-15-minute post-meal walk—stimulates GLUT4 glucose transporters to move to the cell surface mechanically without needing an insulin key, clearing circulating glucose quickly and naturally.`,
+    takeaway: 'Protect a regular 7–9 hour sleep schedule and add a gentle 10-minute walk after your largest meal of the day.',
+    sourceAttribution: 'CDC: Sleep and Chronic Disease Prevention',
+    learnMoreUrl: 'https://www.cdc.gov/sleep/about/index.html'
+  },
+  {
+    id: 'understanding-measurements',
+    category: 'Understanding measurements',
+    title: 'Context in Health Metrics: Beyond a Single Number',
+    readTime: '4 min read',
+    plainLanguageExplanation: 'No single metric—whether Body Mass Index (BMI), a single glucose reading, or weight—can describe your total health.',
+    whyItMatters: 'Clinicians rely on multiple markers, lifestyle patterns, and personal medical history to evaluate true cardiometabolic resilience.',
+    content: `Body Mass Index (BMI) is a simple population screening tool calculated solely from height and weight. It does not measure body composition, differentiate between lean muscle mass and visceral fat, or evaluate blood pressure, lipids, or liver health.
+
+Similarly, a single fingerstick glucose reading only captures a fleeting moment in time, easily swayed by acute stress, dehydration, or recent caffeine. That is why clinicians examine Glycated Hemoglobin (HbA1c), which measures the percentage of hemoglobin proteins bound to sugar over the ~90-to-120-day lifespan of red blood cells.
+
+Clinical guidelines define metabolic syndrome not by a single test, but by a cluster of five cardiometabolic risk factors: elevated waist circumference, high triglycerides, low HDL, elevated blood pressure, and elevated fasting glucose.`,
+    takeaway: 'Treat health data as a puzzle where each metric contributes context, rather than letting any single number define your health.',
+    sourceAttribution: 'NIDDK: The A1C Test & Diabetes Diagnostic Context',
+    learnMoreUrl: 'https://www.niddk.nih.gov/health-information/diagnostic-tests/a1c-test'
   },
   {
     id: 'doctor-conversation-guide',
-    category: 'Clinical Dialogue',
-    title: 'Questions to Discuss With Your Healthcare Professional',
+    category: 'Understanding measurements',
+    title: 'How to Partner With Your Doctor on Metabolic Health',
     readTime: '3 min read',
-    summary: 'A structured, empowering framework for having proactive, evidence-based metabolic discussions with your doctor.',
-    content: `Navigating health conversations can feel overwhelming during brief clinical visits. Having focused, well-structured questions can help you partner effectively with your physician or qualified healthcare provider:
+    plainLanguageExplanation: 'Online educational experiences build literacy, while individualized medical assessments require a licensed physician.',
+    whyItMatters: 'Preparing structured, informed questions helps you make the most of your medical appointments and partner effectively in your care.',
+    content: `Navigating healthcare visits can feel overwhelming. Having focused, evidence-informed questions helps you partner productively with your physician:
 
-**Key Questions to Consider**:
-- *"Could we review my fasting lipid panel together, specifically looking at my triglycerides and HDL ratio rather than just total cholesterol?"*
-- *"Would it be helpful to evaluate my fasting glucose alongside fasting insulin or an HbA1c to get a clearer baseline of my insulin sensitivity?"*
-- *"Are there lifestyle interventions—such as targeted resistance training, dietary fiber adjustments, or sleep optimization—that align best with my current metabolic profile?"*
-- *"If medication or therapies (such as GLP-1 receptor agonists or lipid therapies) are discussed, what are the criteria, expected benefits, and ongoing monitoring plan?"*
+**Constructive Questions for Your Next Checkup**:
+- *"Could we review my fasting lipid panel together, looking specifically at my triglyceride-to-HDL ratio?"*
+- *"Would it be helpful to evaluate an HbA1c alongside my fasting glucose to understand my 3-month glycemic baseline?"*
+- *"What lifestyle levers (such as resistance exercise, dietary fiber variety, or sleep hygiene) align best with my current numbers?"*
 
-Remember: Educational tools like MetaboQuest provide general scientific principles. Only your licensed physician can interpret your personal health history, diagnostic labs, and individual medical needs.`,
-    takeaway: 'Empower yourself as an informed collaborator in your healthcare by preparing targeted, constructive questions for your next appointment.',
-    sources: [
-      { name: 'Harvard Health Publishing — How to Talk to Your Doctor About Heart and Metabolic Health', link: 'https://www.health.harvard.edu' },
-      { name: 'Endocrine Society — Patient Guides to Metabolic Health', link: 'https://www.endocrine.org' }
-    ]
+Remember: Educational platforms like MetaboQuest foster scientific curiosity. Only your licensed physician can interpret your physical exams, lab results, and individual medical needs.`,
+    takeaway: 'Use your metabolic knowledge to ask informed, proactive questions during your routine physician visits.',
+    sourceAttribution: 'National Library of Medicine / MedlinePlus: Understanding Lab Tests',
+    learnMoreUrl: 'https://medlineplus.gov/lab-tests/'
   }
 ];

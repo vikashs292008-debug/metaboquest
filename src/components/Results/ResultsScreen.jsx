@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { RotateCcw, BookOpen, Heart, Sparkles, CheckCircle2, ChevronRight, Award } from 'lucide-react';
+import { RotateCcw, BookOpen, Heart, Sparkles, ChevronRight, Award, Compass, ExternalLink } from 'lucide-react';
 import { ResultCard } from './ResultCard';
 import { ArchetypeBadge } from './ArchetypeBadge';
 import { SharePanel } from './SharePanel';
 import { STEER_CLUB_URL } from '../../utils/sharing';
-import { recordLocalMetric } from '../../utils/persistence';
+import { recordLocalMetric, getUserProfile, saveUserNickname } from '../../utils/persistence';
 
 export function ResultsScreen({
   scorecard,
@@ -17,17 +17,22 @@ export function ResultsScreen({
   showToast
 }) {
   const cardRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('card'); // 'card' or 'breakdown'
+  const [displayName, setDisplayName] = useState(() => getUserProfile().nickname || '');
 
-  // Trigger celebration confetti if score is high (400+)
+  const handleUpdateName = (name) => {
+    setDisplayName(name);
+    saveUserNickname(name);
+  };
+
+  // Trigger celebration confetti for high score (300+)
   useEffect(() => {
-    if (scorecard.totalPoints >= 400) {
+    if (scorecard.totalPoints >= 300) {
       try {
         confetti({
-          particleCount: 70,
+          particleCount: 65,
           spread: 60,
           origin: { y: 0.6 },
-          colors: ['#C6FF65', '#A78BFA', '#38BDF8', '#F59E0B']
+          colors: ['#C6FF65', '#A78BFA', '#34D399', '#38BDF8']
         });
       } catch (e) {
         // Safe fail
@@ -48,17 +53,21 @@ export function ResultsScreen({
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-3"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-lime/10 border border-brand-lime/30 text-xs font-bold text-brand-lime uppercase tracking-widest">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-lime/10 border border-brand-lime/30 text-xs font-bold text-brand-lime uppercase tracking-widest">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>QUEST COMPLETE</span>
+          <span>QUEST COMPLETE · 5 QUESTIONS CONQUERED</span>
         </div>
 
         <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-brand-text">
-          Your Metabolic Profile
+          Your Knowledge Results
         </h1>
 
         <p className="text-sm sm:text-base text-brand-muted max-w-md mx-auto">
-          Here is how your metabolic health literacy stacks up, along with tailored biological takeaways.
+          {scorecard.totalPoints >= 400
+            ? 'Phenomenal knowledge! You have a firm grasp on human metabolic biology.'
+            : scorecard.totalPoints >= 300
+            ? 'Great job! You uncovered key metabolic facts that challenge common myths.'
+            : 'Exciting start! Every discovery helps build a more accurate picture of your body.'}
         </p>
 
         <div className="pt-2">
@@ -76,6 +85,7 @@ export function ResultsScreen({
           ref={cardRef}
           scorecard={scorecard}
           challengeTarget={challengeData?.targetScore}
+          displayName={displayName}
         />
       </motion.div>
 
@@ -89,31 +99,68 @@ export function ResultsScreen({
           scorecard={scorecard}
           challengeData={challengeData}
           cardRef={cardRef}
+          displayName={displayName}
+          onUpdateDisplayName={handleUpdateName}
           onOpenInviteModal={onOpenInviteModal}
           showToast={showToast}
         />
       </motion.div>
 
-      {/* Tailored Educational Takeaway & Topic Breakdown */}
+      {/* Tailored Educational Takeaways & Topic Performance */}
       <div className="p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-white/10 space-y-6">
         
-        {/* Tailored Insight */}
+        {/* Personalized Insight Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Strength Identified */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-brand-surface border border-emerald-500/30 space-y-1.5">
+            <div className="flex items-center gap-2 text-emerald-400">
+              <Award className="w-4 h-4" />
+              <h3 className="font-display font-bold text-xs uppercase tracking-wider">
+                Demonstrated Strength
+              </h3>
+            </div>
+            <p className="text-sm font-semibold text-white">
+              {scorecard.personalization?.strengthTopic || 'Metabolic Concepts'}
+            </p>
+            <p className="text-xs text-brand-muted">
+              You displayed accurate intuition and recall in this metabolic health domain.
+            </p>
+          </div>
+
+          {/* Recommended Topic to Explore Next */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-brand-surface border border-brand-violet/30 space-y-1.5">
+            <div className="flex items-center gap-2 text-brand-violet">
+              <Compass className="w-4 h-4" />
+              <h3 className="font-display font-bold text-xs uppercase tracking-wider">
+                Recommended Topic to Explore Next
+              </h3>
+            </div>
+            <p className="text-sm font-semibold text-white">
+              {scorecard.personalization?.topicToExplore}
+            </p>
+            <p className="text-xs text-brand-muted">
+              Deepen your knowledge by diving into how these biological mechanisms interact.
+            </p>
+          </div>
+        </div>
+
+        {/* Tailored Key Learning Fact */}
         <div className="p-4 sm:p-5 rounded-2xl bg-brand-surface border border-brand-lime/30 space-y-2">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-brand-lime" />
-            <h3 className="font-display font-bold text-sm text-brand-lime uppercase tracking-wider">
-              Personalized Knowledge Takeaway
+            <h3 className="font-display font-bold text-xs text-brand-lime uppercase tracking-wider">
+              Key Learning Takeaway
             </h3>
           </div>
-          <p className="text-sm text-brand-text/90 leading-relaxed">
-            {scorecard.tailoredInsight}
+          <p className="text-xs sm:text-sm text-brand-text/90 leading-relaxed">
+            {scorecard.personalization?.relevantFact}
           </p>
         </div>
 
-        {/* Topic Breakdown Badges */}
+        {/* Topic Breakdown */}
         <div>
           <h4 className="text-xs font-bold uppercase tracking-wider text-brand-muted mb-3">
-            Topic Performance Breakdown
+            Topics Covered in This Round
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {Object.entries(scorecard.topicBreakdown).map(([topic, stats]) => (
@@ -134,10 +181,10 @@ export function ResultsScreen({
         <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <button
             onClick={onReplay}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-surface border border-white/15 hover:border-white/30 text-brand-text font-display font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:bg-white/5"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-sm hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime flex items-center justify-center gap-2"
           >
-            <RotateCcw className="w-4 h-4 text-brand-lime" />
-            <span>Play Fresh 5 Questions</span>
+            <RotateCcw className="w-4 h-4" />
+            <span>Try Another Quest (Fresh 5 Questions)</span>
           </button>
 
           <button
@@ -151,32 +198,44 @@ export function ResultsScreen({
 
       </div>
 
-      {/* Steer Club Next Step Conversion Section */}
+      {/* Configurable Steer Club Section (Section 16) */}
       <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-brand-surface to-brand-card border border-brand-lime/20 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
         <div className="space-y-2 text-center md:text-left">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-brand-lime tracking-wider">
             <Heart className="w-3.5 h-3.5" />
-            <span>Steer Club Partner Resources</span>
+            <span>Official Steer Club Resources</span>
           </span>
           <h3 className="font-display font-bold text-xl text-brand-text">
-            Ready to explore your next metabolic health step?
+            Want to explore more about metabolic health?
           </h3>
           <p className="text-xs text-brand-muted max-w-lg leading-relaxed">
-            MetaboQuest is an educational quest. For verified guidance and personalized metabolic health care pathways, explore Steer Club.
+            MetaboQuest is an educational quest. For verified guidance and personalized metabolic health care pathways, explore official Steer Club resources.
           </p>
         </div>
 
-        <a
-          href={STEER_CLUB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleCtaClick}
-          className="w-full md:w-auto px-6 py-3.5 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-sm hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime flex items-center justify-center gap-2 whitespace-nowrap"
-        >
-          <span>Explore Steer Club</span>
-          <ChevronRight className="w-4 h-4" />
-        </a>
+        {STEER_CLUB_URL ? (
+          <a
+            href={STEER_CLUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleCtaClick}
+            className="w-full md:w-auto px-6 py-3.5 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-sm hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            <span>Discover Steer Club Resources</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        ) : (
+          <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-xs text-brand-muted text-center max-w-xs">
+            <span className="font-semibold text-white block mb-0.5">Partner Integration Ready</span>
+            Set <code className="text-brand-lime text-[11px]">VITE_STEER_CLUB_URL</code> in environment to connect the verified organizer destination.
+          </div>
+        )}
       </div>
+
+      {/* Compact Educational Disclaimer */}
+      <p className="text-center text-xs text-brand-muted/70 italic max-w-xl mx-auto">
+        Educational content, not medical advice. Quiz scores evaluate knowledge of general scientific principles only and do not constitute a medical evaluation, health risk rating, or treatment plan.
+      </p>
 
     </div>
   );

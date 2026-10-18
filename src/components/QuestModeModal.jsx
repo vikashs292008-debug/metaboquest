@@ -6,9 +6,9 @@ const MODES = [
   {
     id: 'classic',
     title: 'Classic 90-Sec Quest',
-    badge: 'Popular',
+    badge: 'Standard',
     questionsCount: 5,
-    maxPoints: 600,
+    maxPoints: 500,
     timeEst: '~90 sec',
     description: 'The signature balanced 5-question circuit across sleep, movement, fiber, and glucose science.',
     icon: Sparkles,
@@ -19,9 +19,9 @@ const MODES = [
     title: 'Metabolic Gauntlet',
     badge: 'Mastery',
     questionsCount: 10,
-    maxPoints: 1100,
+    maxPoints: 1000,
     timeEst: '~3 min',
-    description: 'An intense 10-question deep dive for advanced learners, biohackers, and healthcare enthusiasts.',
+    description: 'An extended 10-question deep dive covering all key metabolic domains and clinical measurement concepts.',
     icon: Trophy,
     color: '#A78BFA'
   },
@@ -30,9 +30,9 @@ const MODES = [
     title: 'Sleep & Circadian Biology',
     badge: 'Topic Sprint',
     questionsCount: 5,
-    maxPoints: 600,
+    maxPoints: 500,
     timeEst: '~90 sec',
-    description: 'Focus exclusively on nocturnal insulin sensitivity, melatonin signaling, and restorative sleep cycles.',
+    description: 'Focus on nocturnal insulin sensitivity, melatonin signaling, and restorative slow-wave sleep cycles.',
     icon: Moon,
     color: '#38BDF8'
   },
@@ -41,31 +41,31 @@ const MODES = [
     title: 'Movement & Muscle Power',
     badge: 'Topic Sprint',
     questionsCount: 5,
-    maxPoints: 600,
+    maxPoints: 500,
     timeEst: '~90 sec',
     description: 'Explore skeletal muscle GLUT4 glucose uptake, post-meal walks, and soleus oxidative physiology.',
     icon: Activity,
     color: '#34D399'
   },
   {
-    id: 'nutrition',
-    title: 'Fiber, Microbiome & Gut',
+    id: 'glucose',
+    title: 'Glucose & Energy Homeostasis',
     badge: 'Topic Sprint',
     questionsCount: 5,
-    maxPoints: 600,
+    maxPoints: 500,
     timeEst: '~90 sec',
-    description: 'Master short-chain fatty acids, gut barrier integrity, and natural GLP-1 / PYY secretion mechanics.',
+    description: 'Master insulin dynamics, cellular energy production, and normal post-meal glycemic curves.',
     icon: Flame,
     color: '#F59E0B'
   },
   {
-    id: 'biomarkers',
-    title: 'Biomarkers & Lipids',
+    id: 'lipids',
+    title: 'Biomarkers & Vascular Health',
     badge: 'Topic Sprint',
     questionsCount: 5,
-    maxPoints: 600,
+    maxPoints: 500,
     timeEst: '~90 sec',
-    description: 'Decode Triglyceride-to-HDL ratios, fasting insulin dynamics, and endothelial vasodilation.',
+    description: 'Decode Triglyceride-to-HDL ratios, blood pressure regulation, and holistic clinical metrics.',
     icon: Shield,
     color: '#EC4899'
   }
@@ -100,7 +100,7 @@ export function QuestModeModal({ isOpen, onClose, onSelectMode }) {
                 Select Your Quest Mode
               </h2>
               <p className="text-xs text-brand-muted">
-                Choose a general quest or target specific metabolic pathways
+                Choose a balanced challenge or target a specific metabolic domain
               </p>
             </div>
           </div>
@@ -115,30 +115,30 @@ export function QuestModeModal({ isOpen, onClose, onSelectMode }) {
         </div>
 
         {/* Modes Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[65vh] overflow-y-auto pr-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
           {MODES.map((mode) => {
             const Icon = mode.icon;
             return (
               <button
                 key={mode.id}
                 onClick={() => handleSelect(mode.id)}
-                className="group p-5 rounded-2xl bg-brand-card/70 border border-white/10 hover:border-white/25 text-left transition-all hover:-translate-y-0.5 flex flex-col justify-between"
+                className="p-4 rounded-2xl bg-brand-card/70 border border-white/10 hover:border-brand-lime/40 hover:bg-brand-card text-left transition-all group flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-2">
                     <div 
-                      className="w-10 h-10 rounded-xl flex items-center justify-center border"
-                      style={{ 
+                      className="w-8 h-8 rounded-xl flex items-center justify-center border"
+                      style={{
                         backgroundColor: `${mode.color}15`,
-                        borderColor: `${mode.color}40`,
+                        borderColor: `${mode.color}35`,
                         color: mode.color
                       }}
                     >
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-4 h-4" />
                     </div>
 
                     <span 
-                      className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full border"
+                      className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border"
                       style={{
                         backgroundColor: `${mode.color}10`,
                         borderColor: `${mode.color}30`,
@@ -149,25 +149,31 @@ export function QuestModeModal({ isOpen, onClose, onSelectMode }) {
                     </span>
                   </div>
 
-                  <h3 className="font-display font-bold text-base text-brand-text mb-1 group-hover:text-white transition-colors">
+                  <h3 className="font-display font-bold text-sm text-brand-text group-hover:text-brand-lime transition-colors">
                     {mode.title}
                   </h3>
 
-                  <p className="text-xs text-brand-muted leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-xs text-brand-muted mt-1 leading-relaxed line-clamp-2">
                     {mode.description}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-brand-muted">
-                  <span className="font-mono">{mode.questionsCount} Questions • {mode.timeEst}</span>
-                  <span className="flex items-center gap-1 font-bold text-brand-lime group-hover:translate-x-0.5 transition-transform">
+                <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-brand-muted">
+                  <span className="font-mono">{mode.questionsCount} questions • {mode.maxPoints} pts</span>
+                  <span className="flex items-center gap-1 font-semibold text-brand-lime group-hover:translate-x-0.5 transition-transform">
                     <span>Play</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
               </button>
             );
           })}
+        </div>
+
+        <div className="text-center pt-2 border-t border-white/5">
+          <p className="text-[11px] text-brand-muted/70 italic">
+            Each mode draws from peer-reviewed public health research. Scores evaluate conceptual learning only.
+          </p>
         </div>
 
       </div>

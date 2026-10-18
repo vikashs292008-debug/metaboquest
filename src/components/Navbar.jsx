@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Trophy, Menu, X, ArrowRight, Activity, Volume2, VolumeX, History, Zap, Sliders } from 'lucide-react';
+import { Sparkles, Trophy, Menu, X, ArrowRight, Activity, Volume2, VolumeX, History, Zap, Sliders, Shield } from 'lucide-react';
 import { sound } from '../utils/audio';
 
 export function Navbar({ 
@@ -7,6 +7,7 @@ export function Navbar({
   onOpenAchievements, 
   onOpenHistory, 
   onOpenModes,
+  onOpenAbout,
   unlockedCount = 0 
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,13 +30,13 @@ export function Navbar({
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-brand-bg/85 backdrop-blur-md transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
-        {/* Brand Wordmark & Animated Logo */}
+        {/* Brand Wordmark & Animated Cellular/Orbit Logo */}
         <a 
           href="#" 
           className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-lime rounded-lg p-1"
           aria-label="MetaboQuest Home"
         >
-          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-brand-lime/20 to-brand-violet/20 border border-brand-lime/40 flex items-center justify-center group-hover:border-brand-lime transition-all">
+          <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-brand-lime/20 via-teal-500/20 to-brand-violet/20 border border-brand-lime/40 flex items-center justify-center group-hover:border-brand-lime transition-all">
             <Activity className="w-5 h-5 text-brand-lime transition-transform group-hover:scale-110" />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-brand-lime animate-pulse" />
           </div>
@@ -44,13 +45,19 @@ export function Navbar({
               Metabo<span className="text-brand-lime">Quest</span>
             </span>
             <span className="text-[10px] tracking-wider uppercase text-brand-muted -mt-1 font-semibold">
-              Science Platform
+              Metabolic Health
             </span>
           </div>
         </a>
 
         {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-brand-muted" aria-label="Main Navigation">
+          <button 
+            onClick={() => scrollTo('learning-library')}
+            className="hover:text-brand-lime transition-colors"
+          >
+            Explore the Science
+          </button>
           <button 
             onClick={() => scrollTo('metabolic-simulator')}
             className="hover:text-brand-lime transition-colors flex items-center gap-1.5"
@@ -71,27 +78,22 @@ export function Navbar({
             Myth vs Fact
           </button>
           <button 
-            onClick={() => scrollTo('action-plan')}
-            className="hover:text-brand-lime transition-colors"
+            onClick={onOpenAbout}
+            className="hover:text-brand-lime transition-colors flex items-center gap-1"
           >
-            7-Day Plan
-          </button>
-          <button 
-            onClick={() => scrollTo('learning-library')}
-            className="hover:text-brand-lime transition-colors"
-          >
-            Science Library
+            <Shield className="w-3.5 h-3.5 text-brand-violet" />
+            <span>About & Privacy</span>
           </button>
         </nav>
 
         {/* Right utility buttons: Sound, History, Badges, Modes, Play CTA */}
         <div className="hidden sm:flex items-center gap-2.5">
-          {/* Sound Toggle */}
+          {/* Sound Toggle (defaults to off) */}
           <button
             onClick={handleToggleSound}
             aria-label={soundActive ? 'Mute sound effects' : 'Enable sound effects'}
             className="p-2 rounded-lg border border-white/10 bg-brand-surface hover:bg-white/5 text-brand-muted hover:text-brand-text transition-colors"
-            title={soundActive ? 'Mute sound' : 'Unmute sound'}
+            title={soundActive ? 'Mute sound effects' : 'Enable sound effects (Web Audio)'}
           >
             {soundActive ? <Volume2 className="w-4 h-4 text-brand-lime" /> : <VolumeX className="w-4 h-4 text-brand-muted" />}
           </button>
@@ -172,6 +174,12 @@ export function Navbar({
         <div className="lg:hidden border-b border-white/10 bg-brand-surface/98 backdrop-blur-xl px-4 py-5 space-y-4">
           <nav className="flex flex-col space-y-3 text-sm font-medium text-brand-text">
             <button 
+              onClick={() => scrollTo('learning-library')}
+              className="text-left py-1 text-brand-muted hover:text-brand-lime"
+            >
+              Explore the Science
+            </button>
+            <button 
               onClick={() => scrollTo('metabolic-simulator')}
               className="text-left py-1 text-brand-muted hover:text-brand-lime flex items-center gap-2"
             >
@@ -185,12 +193,6 @@ export function Navbar({
               Myth vs Fact Cards
             </button>
             <button 
-              onClick={() => scrollTo('metabolic-audit')}
-              className="text-left py-1 text-brand-muted hover:text-brand-lime"
-            >
-              Habit Resilience Index
-            </button>
-            <button 
               onClick={() => scrollTo('daily-quest-section')}
               className="text-left py-1 text-brand-muted hover:text-brand-lime flex items-center justify-between"
             >
@@ -200,10 +202,14 @@ export function Navbar({
               </span>
             </button>
             <button 
-              onClick={() => scrollTo('learning-library')}
-              className="text-left py-1 text-brand-muted hover:text-brand-lime"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAbout && onOpenAbout();
+              }}
+              className="text-left py-1 text-brand-muted hover:text-brand-lime flex items-center gap-2"
             >
-              Science Library
+              <Shield className="w-4 h-4 text-brand-violet" />
+              <span>About & Privacy</span>
             </button>
           </nav>
 

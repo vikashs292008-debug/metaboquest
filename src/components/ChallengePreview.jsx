@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, CheckCircle2, XCircle, ArrowRight, RotateCcw, Lightbulb } from 'lucide-react';
+import { Sparkles, CheckCircle2, ArrowRight, RotateCcw, Lightbulb, ExternalLink, HelpCircle } from 'lucide-react';
 import { PREVIEW_QUESTION } from '../data/questions';
 
 export function ChallengePreview({ onStartFullQuest }) {
   const [selectedId, setSelectedId] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showHint, setShowHint] = useState(false);
 
   const isCorrect = selectedId === PREVIEW_QUESTION.correctAnswerId;
 
@@ -22,6 +23,7 @@ export function ChallengePreview({ onStartFullQuest }) {
   const handleReset = () => {
     setSelectedId(null);
     setIsSubmitted(false);
+    setShowHint(false);
   };
 
   return (
@@ -37,7 +39,7 @@ export function ChallengePreview({ onStartFullQuest }) {
             Try a 15-Second Sample Question
           </h2>
           <p className="text-sm text-brand-muted mt-2 max-w-lg mx-auto">
-            Test the experience right here. This sample lets you preview question dynamics before launching the full 5-question quest.
+            Experience the quest mechanics right here. Test your intuition before jumping into the full 5-question challenge.
           </p>
         </div>
 
@@ -53,9 +55,29 @@ export function ChallengePreview({ onStartFullQuest }) {
             </span>
           </div>
 
-          <h3 className="font-display font-semibold text-lg sm:text-xl text-brand-text mb-6 leading-snug">
+          <h3 className="font-display font-semibold text-lg sm:text-xl text-brand-text mb-4 leading-snug">
             {PREVIEW_QUESTION.question}
           </h3>
+
+          {/* Sample Hint */}
+          {PREVIEW_QUESTION.hint && !isSubmitted && (
+            <div className="mb-5">
+              <button
+                type="button"
+                onClick={() => setShowHint(prev => !prev)}
+                className="inline-flex items-center gap-1.5 text-xs text-brand-lime hover:underline"
+              >
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>{showHint ? 'Hide hint' : 'Not sure? Give me a hint'}</span>
+              </button>
+              {showHint && (
+                <div className="mt-2 p-3 rounded-xl bg-white/5 border border-brand-lime/30 text-xs text-slate-300">
+                  <span className="font-semibold text-brand-lime">Hint: </span>
+                  {PREVIEW_QUESTION.hint}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Options */}
           <div className="space-y-3 mb-6">
@@ -68,7 +90,7 @@ export function ChallengePreview({ onStartFullQuest }) {
                 if (isOptionCorrect) {
                   optionStyles = 'border-emerald-500/60 bg-emerald-500/15 text-emerald-300 font-medium';
                 } else if (isSelected && !isOptionCorrect) {
-                  optionStyles = 'border-rose-500/60 bg-rose-500/15 text-rose-300';
+                  optionStyles = 'border-amber-500/60 bg-amber-500/15 text-amber-200';
                 } else {
                   optionStyles = 'border-white/5 opacity-50 bg-brand-surface/30 text-brand-muted';
                 }
@@ -94,7 +116,7 @@ export function ChallengePreview({ onStartFullQuest }) {
                     <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                   )}
                   {isSubmitted && isSelected && !isOptionCorrect && (
-                    <XCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+                    <Sparkles className="w-4 h-4 text-amber-300 flex-shrink-0" />
                   )}
                 </button>
               );
@@ -119,19 +141,31 @@ export function ChallengePreview({ onStartFullQuest }) {
                 animate={{ opacity: 1, height: 'auto' }}
                 className="pt-4 border-t border-white/10 space-y-4"
               >
-                <div className={`p-4 rounded-xl border ${isCorrect ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-rose-500/10 border-rose-500/30'}`}>
+                <div className={`p-4 rounded-xl border ${isCorrect ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
                   <div className="flex items-center gap-2 mb-1.5">
                     <Lightbulb className="w-4 h-4 text-brand-lime" />
                     <span className="text-xs font-bold uppercase tracking-wider text-brand-text">
-                      {isCorrect ? 'Correct! Here is the science:' : 'Not quite. Here is the science:'}
+                      {isCorrect ? 'Spot on! Here is the science:' : 'Good opportunity to learn something new! Here is the science:'}
                     </span>
                   </div>
                   <p className="text-sm text-brand-text/90 leading-relaxed">
                     {PREVIEW_QUESTION.explanation}
                   </p>
-                  <p className="text-xs text-brand-muted mt-2 pt-2 border-t border-white/5 italic">
-                    Source: {PREVIEW_QUESTION.source}
-                  </p>
+                  
+                  {PREVIEW_QUESTION.sourceUrl && (
+                    <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between text-xs text-brand-muted">
+                      <span>Source: {PREVIEW_QUESTION.sourceTitle}</span>
+                      <a
+                        href={PREVIEW_QUESTION.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-lime hover:underline inline-flex items-center gap-1 text-[11px]"
+                      >
+                        <span>Evidence</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">

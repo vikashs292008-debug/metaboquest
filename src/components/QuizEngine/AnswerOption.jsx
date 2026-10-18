@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, Sparkles } from 'lucide-react';
 
 export function AnswerOption({
   option,
@@ -20,7 +20,8 @@ export function AnswerOption({
     if (isCorrectOption) {
       stateClasses = 'bg-emerald-500/15 border-emerald-500 text-emerald-200 shadow-md font-medium';
     } else if (isSelected && !isCorrectOption) {
-      stateClasses = 'bg-rose-500/15 border-rose-500 text-rose-200';
+      // Non-shaming amber highlight for the chosen option when incorrect
+      stateClasses = 'bg-amber-500/15 border-amber-500/60 text-amber-200';
     } else {
       stateClasses = 'bg-brand-surface/30 border-white/5 text-brand-muted/60 opacity-60';
     }
@@ -54,10 +55,16 @@ export function AnswerOption({
       {showResult && (
         <div className="flex-shrink-0">
           {isCorrectOption && (
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+              <CheckCircle2 className="w-5 h-5" />
+              <span className="hidden sm:inline">Correct Answer</span>
+            </div>
           )}
           {isSelected && !isCorrectOption && (
-            <XCircle className="w-5 h-5 text-rose-400" />
+            <div className="flex items-center gap-1.5 text-xs font-medium text-amber-300">
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden sm:inline">Your Pick</span>
+            </div>
           )}
         </div>
       )}

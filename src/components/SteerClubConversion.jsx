@@ -20,45 +20,50 @@ export function SteerClubConversion() {
           
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-lime/10 border border-brand-lime/30 text-xs font-bold text-brand-lime uppercase tracking-wider">
             <Heart className="w-3.5 h-3.5" />
-            <span>PARTNER PATHWAYS</span>
+            <span>COMMUNITY & PARTNER RESOURCES</span>
           </div>
 
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-text max-w-2xl mx-auto">
-            Ready to explore your next step?
+            Want to explore more about metabolic health?
           </h2>
 
           <p className="text-base text-brand-muted max-w-2xl mx-auto leading-relaxed">
-            Explore evidence-informed metabolic health resources and learn about the options available through Steer Club.
+            Discover the official Steer Club resources and evidence-informed public health education.
           </p>
 
-          {/* Clarity & Boundaries Box */}
+          {/* Clarity & Safety Guardrails */}
           <div className="p-4 sm:p-5 rounded-2xl bg-brand-surface border border-white/10 max-w-2xl mx-auto text-left flex items-start gap-3 text-xs text-brand-muted">
             <ShieldCheck className="w-5 h-5 text-brand-violet flex-shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-semibold text-brand-text">Transparent Clinical Care Standards</p>
+              <p className="font-semibold text-brand-text">Transparent Educational Standards</p>
               <p>
-                MetaboQuest is an educational tool. A quiz score never determines medication eligibility, diagnosis, or clinical appropriateness. All clinical programs and treatment decisions require individualized physician evaluation.
+                MetaboQuest is an educational experience. A quiz score never determines medication eligibility, diagnosis, or clinical appropriateness. All personal medical concerns and care decisions require direct evaluation by a licensed healthcare provider.
               </p>
             </div>
           </div>
 
-          {/* Direct CTA */}
+          {/* Configurable Action: Enabled only when VITE_STEER_CLUB_URL is provided */}
           <div className="pt-2">
-            <a
-              href={STEER_CLUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleCtaClick}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-brand-lime text-brand-bg font-display font-bold text-base hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime group"
-            >
-              <span>Explore Steer Club Resources</span>
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </a>
+            {STEER_CLUB_URL ? (
+              <a
+                href={STEER_CLUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleCtaClick}
+                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-brand-lime text-brand-bg font-display font-bold text-base hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime group"
+              >
+                <span>Discover the Official Steer Club Resources</span>
+                <ExternalLink className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </a>
+            ) : (
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 max-w-md mx-auto text-xs text-brand-muted">
+                <p className="font-semibold text-white mb-1">Partner Destination Configuration</p>
+                <p>
+                  Official external link is configurable via the <code className="text-brand-lime">VITE_STEER_CLUB_URL</code> environment variable. MetaboQuest operates fully and autonomously as a standalone static web application.
+                </p>
+              </div>
+            )}
           </div>
-
-          <p className="text-[11px] text-brand-muted/70 italic">
-            Destination URL is configurable via <code className="text-brand-lime">STEER_CLUB_URL</code> constant.
-          </p>
 
         </div>
 

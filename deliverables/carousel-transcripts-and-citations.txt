@@ -1,0 +1,60 @@
+=======================================================
+SLIDE 1 OF 6: [HOOK & PERSPECTIVE]
+=======================================================
+HEADLINE:    Metabolic health is more than a number.
+SUBHEAD:     There is more to the picture than one measurement.
+BODY COPY:   We are often told our health comes down to a single number on a scale or a single lab reading. But biology is far richer and more dynamic than any isolated metric.
+CLAIMS:      CLM-001
+SOURCES:     SRC-001, SRC-004 (NIDDK, CDC, WHO, MedlinePlus)
+DISCLAIMER:  Educational only. Does not replace clinical advice.
+
+=======================================================
+SLIDE 2 OF 6: [INTERCONNECTED BIOLOGY]
+=======================================================
+HEADLINE:    Your body works as a connected system.
+SUBHEAD:     Metabolism is a continuous biological conversation.
+BODY COPY:   Metabolism refers to all the cellular processes that convert food into steady energy. Your liver, pancreas, brain, and muscles communicate 24/7 to keep vitality flowing.
+CLAIMS:      CLM-002
+SOURCES:     SRC-001, SRC-004 (NIDDK, CDC, WHO, MedlinePlus)
+DISCLAIMER:  Educational only. Does not replace clinical advice.
+
+=======================================================
+SLIDE 3 OF 6: [CELLULAR FUEL]
+=======================================================
+HEADLINE:    How does your body use energy?
+SUBHEAD:     Glucose is essential fuel, not an enemy.
+BODY COPY:   Blood glucose is the primary circulating sugar your cells rely upon. Insulin acts as a molecular key, guiding glucose into cells to power your everyday thoughts and movements.
+CLAIMS:      CLM-003
+SOURCES:     SRC-001 (NIDDK, CDC, WHO, MedlinePlus)
+DISCLAIMER:  Educational only. Does not replace clinical advice.
+
+=======================================================
+SLIDE 4 OF 6: [CLINICAL CONTEXT]
+=======================================================
+HEADLINE:    One number cannot tell the whole story.
+SUBHEAD:     Why health professionals look at the complete mosaic.
+BODY COPY:   Blood sugar, blood pressure, triglycerides, HDL cholesterol, and restorative sleep all influence one another. Evaluating health requires understanding how these factors work together.
+CLAIMS:      CLM-001, CLM-004
+SOURCES:     SRC-004, SRC-006 (NIDDK, CDC, WHO, MedlinePlus)
+DISCLAIMER:  Educational only. Does not replace clinical advice.
+
+=======================================================
+SLIDE 5 OF 6: [EVERYDAY CONTEXT]
+=======================================================
+HEADLINE:    Small habits are part of the conversation.
+SUBHEAD:     Consistency matters far more than extreme regimens.
+BODY COPY:   Regular brisk walks, nourishing fiber-rich foods, and consistent sleep support cellular insulin sensitivity over time. Health is built on sustainable rhythms, not punishing diets.
+CLAIMS:      CLM-005
+SOURCES:     SRC-002, SRC-003, SRC-005 (NIDDK, CDC, WHO, MedlinePlus)
+DISCLAIMER:  Educational only. Does not replace clinical advice.
+
+=======================================================
+SLIDE 6 OF 6: [TAKEAWAY & SOURCES]
+=======================================================
+HEADLINE:    Stay curious about your health.
+SUBHEAD:     Learn from reliable sources. Ask questions. Look at the bigger picture.
+BODY COPY:   Explore verified resources from NIH, CDC, and WHO. Discuss your personal questions with a qualified healthcare provider who knows your unique story.
+CLAIMS:      CLM-006
+SOURCES:     SRC-001, SRC-002, SRC-004 (NIDDK, CDC, WHO, MedlinePlus)
+DISCLAIMER:  Educational only. Does not replace clinical advice.
+

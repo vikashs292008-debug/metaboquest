@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Share2, Download, Copy, Check, Swords, Trophy, Sparkles } from 'lucide-react';
+import { Share2, Download, Copy, Check, Swords, User, Sparkles } from 'lucide-react';
 import { generateChallengeUrl, shareQuestResult, downloadResultImage } from '../../utils/sharing';
 import { recordLocalMetric } from '../../utils/persistence';
 
@@ -8,21 +8,36 @@ export function SharePanel({
   challengeData, 
   cardRef, 
   onOpenInviteModal, 
+  displayName,
+  onUpdateDisplayName,
   showToast 
 }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const challengeUrl = generateChallengeUrl(scorecard.totalPoints, scorecard.archetype.title);
+  const challengeUrl = generateChallengeUrl(scorecard.totalPoints, scorecard.archetype.title, displayName);
 
-  // Download high-res PNG
+  // Download high-res genuine PNG
   const handleDownloadImage = async () => {
-    if (!cardRef.current) return;
     setIsDownloading(true);
     recordLocalMetric('shareClicks');
 
     try {
-      const success = await downloadResultImage(cardRef.current, `metaboquest-${scorecard.archetype.title.toLowerCase().replace(/\s+/g, '-')}.png`);
+      const filename = `metaboquest-${scorecard.archetype.title.toLowerCase().replace(/\s+/g, '-')}.png`;
+      const fallbackData = {
+        score: scorecard.totalPoints,
+        maxScore: scorecard.maxScore || 500,
+        correctCount: scorecard.correctCount,
+        totalQuestions: scorecard.totalQuestions || 5,
+        archetypeTitle: scorecard.archetype.title,
+        archetypeTagline: scorecard.archetype.tagline,
+        playerName: displayName,
+        strengthTopic: scorecard.personalization?.strengthTopic,
+        takeaway: scorecard.personalization?.relevantFact
+      };
+
+      const success = await downloadResultImage(cardRef.current, filename, fallbackData);
+      
       if (success) {
         if (showToast) {
           showToast({
@@ -35,7 +50,8 @@ export function SharePanel({
         if (showToast) {
           showToast({
             type: 'info',
-            message: 'Image export fallback: You can copy your challenge link directly!'
+            title: 'Image Export Notice',
+            message: 'You can copy your challenge link directly to share with friends!'
           });
         }
       }
@@ -46,10 +62,10 @@ export function SharePanel({
     }
   };
 
-  // Quick Copy
+  // Quick Copy Link
   const handleCopyLink = async () => {
     try {
-      if (navigator.clipboard) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(challengeUrl);
       } else {
         const ta = document.createElement('textarea');
@@ -74,13 +90,14 @@ export function SharePanel({
     }
   };
 
-  // Native share
+  // Native Web Share
   const handleNativeShare = async () => {
     recordLocalMetric('shareClicks');
     const res = await shareQuestResult({
       score: scorecard.totalPoints,
       archetypeTitle: scorecard.archetype.title,
-      shareUrl: challengeUrl
+      shareUrl: challengeUrl,
+      displayName
     });
     if (showToast) {
       showToast({
@@ -90,66 +107,78 @@ export function SharePanel({
     }
   };
 
-  // Friend comparison banner (if this run was a friend challenge)
-  const renderComparison = () => {
-    if (!challengeData) return null;
-
-    const diff = scorecard.totalPoints - challengeData.targetScore;
-    let badgeText = '';
-    let badgeClass = '';
-
-    if (diff > 0) {
-      badgeText = `Victory! You beat ${challengeData.friendName} by ${diff} points!`;
-      badgeClass = 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
-    } else if (diff === 0) {
-      badgeText = `An exact tie with ${challengeData.friendName}! Both scored ${scorecard.totalPoints} pts!`;
-      badgeClass = 'bg-amber-500/15 border-amber-500/40 text-amber-300';
-    } else {
-      badgeText = `${challengeData.friendName} still holds the lead by ${Math.abs(diff)} pts. Challenge them again or challenge another friend!`;
-      badgeClass = 'bg-brand-violet/15 border-brand-violet/40 text-brand-violet';
-    }
-
-    return (
-      <div className={`p-4 rounded-2xl border mb-6 text-center text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 ${badgeClass}`}>
-        <Swords className="w-4 h-4 flex-shrink-0" />
-        <span>{badgeText}</span>
-      </div>
-    );
-  };
-
   return (
-    <div className="space-y-4">
-      {renderComparison()}
+    <div className="p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-white/10 space-y-6">
+      
+      {/* Optional Display Name Input */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div className="text-center sm:text-left">
+          <label htmlFor="explorer-name" className="block text-xs font-bold uppercase tracking-wider text-brand-lime mb-0.5">
+            Card Customization (Optional)
+          </label>
+          <p className="text-xs text-brand-muted">
+            Add your nickname or handle to appear on your downloadable result card.
+          </p>
+        </div>
 
+        <div className="w-full sm:w-auto relative">
+          <input
+            id="explorer-name"
+            type="text"
+            placeholder="Your name or handle"
+            value={displayName}
+            onChange={(e) => onUpdateDisplayName && onUpdateDisplayName(e.target.value)}
+            maxLength={24}
+            className="w-full sm:w-60 px-3.5 py-2 rounded-xl bg-brand-surface border border-white/15 text-xs text-brand-text placeholder-brand-muted/50 focus:outline-none focus:border-brand-lime"
+          />
+        </div>
+      </div>
+
+      {/* Main Action Buttons Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {/* Copy link */}
-        <button
-          onClick={handleCopyLink}
-          className="p-3.5 rounded-xl bg-brand-surface border border-white/10 hover:border-white/20 text-brand-text font-display font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all hover:bg-white/5"
-        >
-          {copied ? <Check className="w-4 h-4 text-brand-lime" /> : <Copy className="w-4 h-4 text-brand-muted" />}
-          <span>{copied ? 'Link Copied!' : 'Copy Challenge Link'}</span>
-        </button>
-
-        {/* Download PNG */}
+        {/* Download Genuine PNG */}
         <button
           onClick={handleDownloadImage}
           disabled={isDownloading}
-          className="p-3.5 rounded-xl bg-brand-surface border border-white/10 hover:border-white/20 text-brand-text font-display font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all hover:bg-white/5 disabled:opacity-50"
+          className="p-4 rounded-2xl bg-brand-lime text-brand-bg font-display font-bold text-sm hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime flex items-center justify-center gap-2"
         >
-          <Download className="w-4 h-4 text-brand-lime" />
-          <span>{isDownloading ? 'Generating PNG...' : 'Download Card PNG'}</span>
+          <Download className="w-4 h-4" />
+          <span>{isDownloading ? 'Generating PNG...' : 'Download My Result Card'}</span>
         </button>
 
-        {/* Challenge Friend / Native Share */}
+        {/* Challenge a friend modal */}
         <button
           onClick={onOpenInviteModal}
-          className="p-3.5 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-xs sm:text-sm hover:bg-[#d4ff80] active:scale-95 transition-all shadow-glow-lime flex items-center justify-center gap-2"
+          className="p-4 rounded-2xl bg-brand-violet text-brand-bg font-display font-bold text-sm hover:bg-[#bca6fb] active:scale-95 transition-all shadow-glow-violet flex items-center justify-center gap-2"
         >
           <Swords className="w-4 h-4" />
           <span>Challenge a Friend</span>
         </button>
+
+        {/* Native Web Share or Copy Link */}
+        <button
+          onClick={handleNativeShare}
+          className="p-4 rounded-2xl bg-brand-surface border border-white/15 hover:border-white/30 text-brand-text font-display font-semibold text-sm hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2"
+        >
+          <Share2 className="w-4 h-4 text-brand-lime" />
+          <span>Share Quest Link</span>
+        </button>
       </div>
+
+      {/* Copy link fallback bar */}
+      <div className="p-3.5 rounded-xl bg-brand-surface/80 border border-white/10 flex items-center justify-between gap-3 text-xs">
+        <div className="truncate text-brand-muted font-mono">
+          {challengeUrl}
+        </div>
+        <button
+          onClick={handleCopyLink}
+          className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-brand-text font-semibold flex items-center gap-1.5 flex-shrink-0 transition-colors"
+        >
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          <span>{copied ? 'Copied' : 'Copy'}</span>
+        </button>
+      </div>
+
     </div>
   );
 }

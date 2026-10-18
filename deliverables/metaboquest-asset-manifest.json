@@ -1,0 +1,40 @@
+{
+  "campaignId": "cmp_metabolic_01",
+  "campaignTitle": "Metabolic Health Is More Than a Number",
+  "studio": "MetaboQuest Content Lab",
+  "generatedAt": "2026-10-18T12:04:11.861Z",
+  "qualityScore": 100,
+  "assets": [
+    {
+      "type": "carousel",
+      "filenamePattern": "metaboquest-carousel-slide-{01..06}.png",
+      "slidesCount": 6,
+      "dimensions": "1080x1350 px (4:5)"
+    },
+    {
+      "type": "static_post",
+      "filename": "metaboquest-static-post.png",
+      "dimensions": "1080x1350 px (4:5)"
+    },
+    {
+      "type": "reel_video",
+      "filename": "metaboquest-reel.webm",
+      "durationSeconds": 25,
+      "dimensions": "1080x1920 px (9:16)",
+      "transcriptFiles": [
+        "metaboquest-reel-transcript.srt",
+        "metaboquest-reel-transcript.txt"
+      ]
+    },
+    {
+      "type": "documentation",
+      "files": [
+        "metaboquest-research-register.csv",
+        "metaboquest-research-register.json",
+        "metaboquest-claim-ledger.csv",
+        "metaboquest-claim-ledger.json",
+        "metaboquest-campaign-summary.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <linearGradient id="bg_s" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070B14" />
+      <stop offset="40%" stop-color="#0D172A" />
+      <stop offset="100%" stop-color="#050810" />
+    </linearGradient>
+    <radialGradient id="glow_s" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00F2FE" stop-opacity="0.2" />
+      <stop offset="40%" stop-color="#10B981" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="transparent" />
+    </radialGradient>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg_s)" />
+  <rect width="1080" height="1350" fill="url(#glow_s)" />
+  <rect x="80" y="80" width="920" height="1190" rx="36" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+  
+  <!-- Header -->
+  <circle cx="145" cy="150" r="12" fill="#10B981" />
+  <circle cx="160" cy="150" r="10" fill="none" stroke="#00F2FE" stroke-width="3" />
+  <text x="185" y="158" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="24" fill="#FFFFFF">METABOQUEST</text>
+  <text x="935" y="158" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="16" fill="#10B981" text-anchor="end">EVIDENCE-BASED CAMPAIGN</text>
+
+  <!-- Tag -->
+  <rect x="140" y="215" width="280" height="42" rx="21" fill="rgba(0,242,254,0.15)" stroke="rgba(0,242,254,0.5)" stroke-width="1.5" />
+  <text x="165" y="242" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="15" fill="#00F2FE">METABOLIC LITERACY</text>
+
+  <!-- Headline -->
+  <text x="140" y="340" font-family="'Space Grotesk', sans-serif" font-weight="800" font-size="64" fill="#FFFFFF">Metabolic health is bigger</text>
+  <text x="140" y="415" font-family="'Space Grotesk', sans-serif" font-weight="800" font-size="64" fill="#FFFFFF">than one number.</text>
+  
+  <text x="140" y="475" font-family="Inter, sans-serif" font-weight="600" font-size="28" fill="#10B981">Understanding the bigger picture starts with reliable info.</text>
+
+  <!-- Network Diagram -->
+  <g transform="translate(140, 560)">
+    <!-- Interconnecting lines -->
+    <line x1="120" y1="50" x2="400" y2="20" stroke="rgba(255,255,255,0.2)" stroke-dasharray="6 6" stroke-width="2" />
+    <line x1="400" y1="20" x2="680" y2="50" stroke="rgba(255,255,255,0.2)" stroke-dasharray="6 6" stroke-width="2" />
+    <line x1="120" y1="50" x2="240" y2="160" stroke="rgba(255,255,255,0.2)" stroke-dasharray="6 6" stroke-width="2" />
+    <line x1="680" y1="50" x2="560" y2="160" stroke="rgba(255,255,255,0.2)" stroke-dasharray="6 6" stroke-width="2" />
+    <line x1="240" y1="160" x2="560" y2="160" stroke="rgba(255,255,255,0.2)" stroke-dasharray="6 6" stroke-width="2" />
+
+    <!-- 5 Nodes -->
+    <circle cx="120" cy="50" r="44" fill="rgba(16,185,129,0.25)" stroke="#10B981" stroke-width="3" />
+    <text x="120" y="55" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="15" fill="#FFFFFF" text-anchor="middle">GLUCOSE</text>
+
+    <circle cx="400" cy="20" r="48" fill="rgba(0,242,254,0.25)" stroke="#00F2FE" stroke-width="3" />
+    <text x="400" y="25" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="15" fill="#FFFFFF" text-anchor="middle">LIPIDS</text>
+
+    <circle cx="680" cy="50" r="44" fill="rgba(167,139,250,0.25)" stroke="#A78BFA" stroke-width="3" />
+    <text x="680" y="55" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="15" fill="#FFFFFF" text-anchor="middle">VESSELS</text>
+
+    <circle cx="240" cy="160" r="40" fill="rgba(245,158,11,0.25)" stroke="#F59E0B" stroke-width="3" />
+    <text x="240" y="165" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="14" fill="#FFFFFF" text-anchor="middle">SLEEP</text>
+
+    <circle cx="560" cy="160" r="40" fill="rgba(198,255,101,0.25)" stroke="#C6FF65" stroke-width="3" />
+    <text x="560" y="165" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="14" fill="#FFFFFF" text-anchor="middle">HABITS</text>
+  </g>
+
+  <!-- Body -->
+  <text x="140" y="860" font-family="Inter, sans-serif" font-size="28" fill="#CBD5E1">Cellular energy, vascular resilience, blood glucose, and</text>
+  <text x="140" y="905" font-family="Inter, sans-serif" font-size="28" fill="#CBD5E1">daily sleep interact in a continuous biological dialogue.</text>
+  <text x="140" y="950" font-family="Inter, sans-serif" font-size="28" fill="#CBD5E1">Evaluating health requires looking at the full connected system.</text>
+
+  <!-- Footer -->
+  <rect x="140" y="1120" width="800" height="115" rx="18" fill="rgba(15,23,42,0.85)" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+  <text x="170" y="1155" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="18" fill="#10B981">Learn more from trusted health resources.</text>
+  <text x="170" y="1188" font-family="Inter, sans-serif" font-weight="500" font-size="15" fill="#E2E8F0">Evidence-based review: NIDDK • CDC • WHO • MedlinePlus</text>
+  <text x="170" y="1215" font-family="Inter, sans-serif" font-size="13" fill="#64748B">Educational content only. Does not replace individualized clinical advice.</text>
+</svg>

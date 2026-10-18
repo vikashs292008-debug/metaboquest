@@ -1,4 +1,4 @@
-import { calculateScorecard, MAX_SCORE, POINTS_PER_CORRECT, COMPLETION_BONUS } from './src/utils/scoring.js';
+import { calculateScorecard, MAX_SCORE, POINTS_PER_CORRECT, ARCHETYPES } from './src/utils/scoring.js';
 import { sanitizeString } from './src/utils/sharing.js';
 import { QUESTIONS_BANK, PREVIEW_QUESTION } from './src/data/questions.js';
 import { ACHIEVEMENTS } from './src/data/achievements.js';
@@ -38,7 +38,7 @@ QUESTIONS_BANK.forEach(q => {
     console.error(`Question ${q.id} has invalid correctAnswerId ${q.correctAnswerId}`);
     allQuestionsValid = false;
   }
-  if (!q.explanation || !q.source) {
+  if (!q.explanation || (!q.source && !q.sourceTitle)) {
     allQuestionsValid = false;
   }
 });
@@ -53,9 +53,9 @@ const perfectAnswers = [
   { questionId: 'q5', isCorrect: true, topic: 'General' },
 ];
 const perfectResult = calculateScorecard(perfectAnswers, 75, true);
-assert(perfectResult.totalPoints === 600, `Perfect score equals 600 pts (actual: ${perfectResult.totalPoints})`);
+assert(perfectResult.totalPoints === 500, `Perfect score equals 500 pts (actual: ${perfectResult.totalPoints})`);
 assert(perfectResult.accuracyPercent === 100, `Perfect score accuracy is 100%`);
-assert(perfectResult.archetype.title === 'Metabolic Scholar', `Archetype is Metabolic Scholar`);
+assert(perfectResult.archetype.title === 'Metabolic Health Enthusiast', `Archetype is Metabolic Health Enthusiast`);
 
 // TEST 3: Scoring calculations - Partial Score (3/5)
 const partialAnswers = [
@@ -66,9 +66,9 @@ const partialAnswers = [
   { questionId: 'q5', isCorrect: true, topic: 'General' },
 ];
 const partialResult = calculateScorecard(partialAnswers, 85, true);
-assert(partialResult.totalPoints === 400, `3 correct + bonus equals 400 pts (actual: ${partialResult.totalPoints})`);
+assert(partialResult.totalPoints === 300, `3 correct equals 300 pts (actual: ${partialResult.totalPoints})`);
 assert(partialResult.correctCount === 3 && partialResult.incorrectCount === 2, `Correct/incorrect counts are accurate`);
-assert(partialResult.archetype.title === 'Science Seeker', `Archetype is Science Seeker (actual: ${partialResult.archetype.title})`);
+assert(partialResult.archetype.title === 'Knowledge Builder', `Archetype is Knowledge Builder (actual: ${partialResult.archetype.title})`);
 
 // TEST 4: Scoring calculations - Zero Correct (0/5)
 const zeroAnswers = [
@@ -79,8 +79,8 @@ const zeroAnswers = [
   { questionId: 'q5', isCorrect: false, topic: 'General' },
 ];
 const zeroResult = calculateScorecard(zeroAnswers, 95, true);
-assert(zeroResult.totalPoints === 100, `0 correct + completion bonus equals 100 pts (actual: ${zeroResult.totalPoints})`);
-assert(zeroResult.archetype.title === 'Wellness Curious', `Archetype is Wellness Curious`);
+assert(zeroResult.totalPoints === 0, `0 correct equals 0 pts (actual: ${zeroResult.totalPoints})`);
+assert(zeroResult.archetype.title === 'Curious Explorer', `Archetype is Curious Explorer`);
 
 // TEST 5: Input sanitization & defensive string validation
 const maliciousInput = '<script>alert("hack")</script>';

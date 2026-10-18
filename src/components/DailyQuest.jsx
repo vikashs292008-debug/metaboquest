@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Flame, CheckCircle2, XCircle, ArrowRight, Sparkles, Clock, HelpCircle } from 'lucide-react';
+import { Calendar, Flame, CheckCircle2, Sparkles, Clock, ArrowRight, ExternalLink } from 'lucide-react';
 import { QUESTIONS_BANK } from '../data/questions';
 import { getDailyQuestState, markDailyQuestCompleted } from '../utils/persistence';
 
@@ -47,7 +47,7 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
       showToast({
         type: 'achievement',
         title: 'Daily Quest Complete!',
-        message: `Streak is now ${newState.streak} days on this device!`
+        message: 'Daily Explorer badge progress recorded on this device!'
       });
     }
   };
@@ -58,7 +58,7 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
         
         <div className="p-8 sm:p-10 rounded-3xl glass-panel-elevated border border-brand-lime/20 relative overflow-hidden shadow-2xl">
           
-          {/* Subtle decorative glow */}
+          {/* Subtle decorative ambient glow */}
           <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-brand-lime/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -73,12 +73,12 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
                 
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs font-bold text-amber-400">
                   <Flame className="w-3.5 h-3.5" />
-                  <span>{dailyState.streak} Day Device Streak</span>
+                  <span>{dailyState.streak} Day Learning Check-in</span>
                 </span>
 
                 <span className="text-xs text-brand-muted flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
-                  <span>30 seconds</span>
+                  <span>About 30 seconds</span>
                 </span>
               </div>
 
@@ -87,13 +87,13 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
               </h2>
 
               <p className="text-sm text-brand-muted max-w-xl">
-                One new scientific focus every 24 hours. Keep your curiosity sharp and track your streak locally on this device.
+                One short educational question every 24 hours. A guilt-free way to build steady curiosity one small discovery at a time.
               </p>
 
               <div className="flex items-center gap-4 text-xs font-semibold text-brand-muted">
                 <span>Topic: <span className="text-brand-lime">{question.topic}</span></span>
                 <span>•</span>
-                <span>Reward: <span className="text-brand-lime">+100 Pts & Badge Progress</span></span>
+                <span>Reward: <span className="text-brand-lime">Daily Explorer Badge Progress</span></span>
               </div>
             </div>
 
@@ -104,7 +104,7 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
                   <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
                   <div>
                     <p className="text-xs uppercase font-bold text-emerald-400">Completed for today</p>
-                    <p className="text-xs text-brand-muted">Come back tomorrow for the next quest!</p>
+                    <p className="text-xs text-brand-muted">Come back for another quest tomorrow!</p>
                   </div>
                 </div>
               ) : (
@@ -137,7 +137,7 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
             <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
               <span className="text-xs font-bold text-brand-lime uppercase tracking-wider flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5" />
-                <span>Today’s Question • {question.topic}</span>
+                <span>Today’s Discovery • {question.topic}</span>
               </span>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -163,7 +163,7 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
                   if (isOptCorrect) {
                     optClass = 'border-emerald-500 bg-emerald-500/15 text-emerald-300 font-medium';
                   } else if (isSelected && !isOptCorrect) {
-                    optClass = 'border-rose-500 bg-rose-500/15 text-rose-300';
+                    optClass = 'border-amber-500/60 bg-amber-500/15 text-amber-200';
                   } else {
                     optClass = 'border-white/5 opacity-40 bg-brand-card text-brand-muted';
                   }
@@ -183,7 +183,7 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                     )}
                     {isAnswerSubmitted && isSelected && !isOptCorrect && (
-                      <XCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+                      <Sparkles className="w-4 h-4 text-amber-300 flex-shrink-0" />
                     )}
                   </button>
                 );
@@ -209,21 +209,40 @@ export function DailyQuest({ onUnlockAchievement, showToast }) {
               </div>
             ) : (
               <div className="space-y-4 pt-3 border-t border-white/10">
-                <div className={`p-4 rounded-xl border text-xs leading-relaxed ${isCorrect ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-brand-surface border-white/10'}`}>
+                <div className={`p-4 rounded-xl border text-xs leading-relaxed ${isCorrect ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
                   <p className="font-bold text-brand-text mb-1">
-                    {isCorrect ? 'Correct! Well done.' : 'Good attempt! Here is the science:'}
+                    {isCorrect ? 'Correct! Well done.' : 'Good opportunity to learn something new! Here is the science:'}
                   </p>
-                  <p className="text-brand-muted">{question.explanation}</p>
-                  <p className="text-[11px] text-brand-muted/70 italic mt-2">
-                    Source: {question.source}
-                  </p>
+                  <p className="text-brand-muted leading-relaxed">{question.explanation}</p>
+                  
+                  {question.sourceUrl && (
+                    <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
+                      <span className="text-[11px] text-brand-muted italic truncate max-w-[280px]">
+                        {question.sourceTitle}
+                      </span>
+                      <a
+                        href={question.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-lime hover:underline inline-flex items-center gap-1 text-[11px] font-medium"
+                      >
+                        <span>Evidence</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-3 rounded-xl bg-white/5 text-center text-xs text-brand-muted">
+                  <p className="font-semibold text-white">Come back for another quest tomorrow!</p>
+                  <p className="text-[11px] mt-0.5">Learning check-ins are for personal curiosity. Streaks do not evaluate physical health.</p>
                 </div>
 
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-brand-text font-display font-semibold text-xs transition-colors"
+                  className="w-full py-2.5 rounded-xl bg-brand-lime text-brand-bg font-display font-bold text-xs transition-colors"
                 >
-                  Close & Keep Exploring
+                  Done
                 </button>
               </div>
             )}

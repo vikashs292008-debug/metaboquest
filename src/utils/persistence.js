@@ -1,6 +1,15 @@
 /**
- * LocalStorage Persistence & Local Privacy Metrics
+ * LocalStorage Persistence & Local Privacy Controls
+ * 
  * Safely accesses browser storage with defensive fallbacks.
+ * Stores ONLY non-sensitive preferences and gamified learning milestones:
+ * - Theme preference
+ * - Completed quiz count & scores
+ * - Unlocked learning badges
+ * - Daily quest date & streak
+ * - Optional display nickname
+ * 
+ * NEVER stores medical histories, diagnoses, or biometric parameters.
  */
 
 const STORAGE_KEYS = {
@@ -8,17 +17,19 @@ const STORAGE_KEYS = {
   ACHIEVEMENTS: 'metaboquest_unlocked_achievements',
   DAILY: 'metaboquest_daily_state',
   SETTINGS: 'metaboquest_user_settings',
-  HISTORY: 'metaboquest_score_history'
+  HISTORY: 'metaboquest_score_history',
+  PROFILE: 'metaboquest_user_profile'
 };
 
 /**
- * Safe getItem wrapper
+ * Safe getItem wrapper with defensive JSON parsing
  */
 export function getStoredItem(key, defaultValue) {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return defaultValue;
     const item = window.localStorage.getItem(key);
-    return item ? JSON.parse(item) : defaultValue;
+    if (!item) return defaultValue;
+    return JSON.parse(item);
   } catch (e) {
     console.warn(`LocalStorage read failed for key ${key}:`, e);
     return defaultValue;
@@ -26,7 +37,7 @@ export function getStoredItem(key, defaultValue) {
 }
 
 /**
- * Safe setItem wrapper
+ * Safe setItem wrapper with quota and permission safety
  */
 export function setStoredItem(key, value) {
   try {
@@ -37,7 +48,22 @@ export function setStoredItem(key, value) {
   }
 }
 
-// Local event metrics tracking (on-device only, privacy-conscious)
+// User Profile (Optional Nickname)
+export function getUserProfile() {
+  return getStoredItem(STORAGE_KEYS.PROFILE, {
+    nickname: ''
+  });
+}
+
+export function saveUserNickname(nickname) {
+  const clean = typeof nickname === 'string' ? nickname.trim().slice(0, 24) : '';
+  const current = getUserProfile();
+  const updated = { ...current, nickname: clean };
+  setStoredItem(STORAGE_KEYS.PROFILE, updated);
+  return updated;
+}
+
+// Local event metrics tracking (on-device count only)
 export function getLocalMetrics() {
   return getStoredItem(STORAGE_KEYS.METRICS, {
     quizStarts: 0,
@@ -95,7 +121,7 @@ export function getDailyQuestState() {
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
     
-    // If completed yesterday, keep streak; otherwise reset streak to 0
+    // If completed yesterday, keep streak; otherwise streak returns to 0
     const maintainedStreak = state.lastDate === yesterdayStr ? state.streak : 0;
     
     return {
@@ -124,11 +150,12 @@ export function markDailyQuestCompleted() {
   return updated;
 }
 
-// User settings (e.g., timer preference)
+// User settings (timer, reduced motion, theme)
 export function getUserSettings() {
   return getStoredItem(STORAGE_KEYS.SETTINGS, {
     timerEnabled: true,
-    reducedMotion: false
+    reducedMotion: false,
+    theme: 'dark'
   });
 }
 
@@ -144,7 +171,7 @@ export function getQuestHistory() {
   return getStoredItem(STORAGE_KEYS.HISTORY, []);
 }
 
-export function recordQuestAttempt({ score, maxScore, accuracyPercent, archetypeTitle, mode = 'classic' }) {
+export function recordQuestAttempt({ score, maxScore = 500, accuracyPercent, archetypeTitle, mode = 'classic' }) {
   const history = getQuestHistory();
   const newRecord = {
     id: `quest_${Date.now()}`,
@@ -165,4 +192,23 @@ export function recordQuestAttempt({ score, maxScore, accuracyPercent, archetype
 export function clearQuestHistory() {
   setStoredItem(STORAGE_KEYS.HISTORY, []);
   return [];
+}
+
+/**
+ * Completely resets all local progress and preferences
+ * Backed by user confirmation in UI.
+ */
+export function resetAllLocalData() {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      Object.values(STORAGE_KEYS).forEach(k => {
+        window.localStorage.removeItem(k);
+      });
+      window.localStorage.removeItem('metaboquest_sound_enabled');
+    }
+    return true;
+  } catch (e) {
+    console.error('Failed to reset local storage:', e);
+    return false;
+  }
 }

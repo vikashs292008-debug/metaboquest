@@ -7,7 +7,7 @@
 class SoundEngine {
   constructor() {
     this.ctx = null;
-    this.enabled = true;
+    this.enabled = false; // Defaults to off per specification
     
     // Read preference from LocalStorage
     try {

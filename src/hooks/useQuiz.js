@@ -17,39 +17,61 @@ function shuffleArray(array) {
 }
 
 /**
+ * Selects 5 balanced questions with varied topics for the standard round.
+ */
+function selectBalancedQuestions(count = 5) {
+  const allShuffled = shuffleArray(QUESTIONS_BANK);
+  const selected = [];
+  const usedTopics = new Set();
+
+  // First pass: pick questions with unique topics
+  for (const q of allShuffled) {
+    if (!usedTopics.has(q.topic)) {
+      selected.push(q);
+      usedTopics.add(q.topic);
+      if (selected.length >= count) break;
+    }
+  }
+
+  // Second pass: if we still need more questions, fill in remaining
+  if (selected.length < count) {
+    for (const q of allShuffled) {
+      if (!selected.some(item => item.id === q.id)) {
+        selected.push(q);
+        if (selected.length >= count) break;
+      }
+    }
+  }
+
+  return selected;
+}
+
+/**
  * Selects questions based on chosen mode
- * @param {'classic' | 'gauntlet' | 'sleep' | 'movement' | 'nutrition' | 'biomarkers'} mode
+ * @param {'classic' | 'gauntlet' | 'sleep' | 'movement' | 'glucose' | 'lipids'} mode
  */
 function selectQuestionsByMode(mode = 'classic') {
-  const shuffled = shuffleArray(QUESTIONS_BANK);
-
   if (mode === 'gauntlet') {
-    // 10 questions covering multiple topics
-    return shuffled.slice(0, 10);
+    return shuffleArray(QUESTIONS_BANK).slice(0, 10);
   }
 
   if (mode === 'sleep') {
-    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.SLEEP);
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.SLEEP_MOVEMENT);
     return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
   }
 
-  if (mode === 'movement') {
-    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.MOVEMENT);
+  if (mode === 'glucose') {
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.GLUCOSE_ENERGY);
     return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
   }
 
-  if (mode === 'nutrition') {
-    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.NUTRITION);
+  if (mode === 'lipids') {
+    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.LIPIDS || q.topic === TOPICS.BLOOD_PRESSURE);
     return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
   }
 
-  if (mode === 'biomarkers') {
-    const filtered = QUESTIONS_BANK.filter(q => q.topic === TOPICS.BIOMARKERS || q.topic === TOPICS.GLUCOSE);
-    return shuffleArray(filtered).slice(0, Math.min(5, filtered.length));
-  }
-
-  // Default 'classic' mode: 5 questions
-  return shuffled.slice(0, TOTAL_QUESTIONS_PER_ROUND);
+  // Default 'classic' mode: 5 balanced questions
+  return selectBalancedQuestions(TOTAL_QUESTIONS_PER_ROUND);
 }
 
 export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
@@ -59,8 +81,10 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
   const [selectedOptionId, setSelectedOptionId] = useState(null);
   const [isAnswerLocked, setIsAnswerLocked] = useState(false);
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
+  const [isHintVisible, setIsHintVisible] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showMilestoneToast, setShowMilestoneToast] = useState(false);
   
   // Timer state
   const [timerEnabled, setTimerEnabled] = useState(initialTimerEnabled);
@@ -92,13 +116,21 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
   }, [isTimerRunning, isCompleted, timerEnabled]);
 
   /**
-   * Selects an answer option with audio
+   * Selects an answer option with subtle audio
    */
   const handleSelectOption = useCallback((optionId) => {
     if (isAnswerLocked || isCompleted) return;
     sound.playSelect();
     setSelectedOptionId(optionId);
   }, [isAnswerLocked, isCompleted]);
+
+  /**
+   * Toggles educational hint
+   */
+  const handleToggleHint = useCallback(() => {
+    sound.playSelect();
+    setIsHintVisible(prev => !prev);
+  }, []);
 
   /**
    * Confirms the selected answer, locks selection, computes correctness, awards points, plays audio
@@ -124,12 +156,20 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
       isCorrect,
       topic: currentQuestion.topic,
       explanation: currentQuestion.explanation,
-      source: currentQuestion.source
+      hint: currentQuestion.hint,
+      sourceTitle: currentQuestion.sourceTitle,
+      sourceUrl: currentQuestion.sourceUrl
     };
 
     setAnswers(prev => [...prev, answerRecord]);
     setIsFeedbackVisible(true);
-  }, [selectedOptionId, isAnswerLocked, currentQuestion]);
+
+    // Subtle milestone animation after completing Question 3 (index 2)
+    if (currentIndex === 2) {
+      setShowMilestoneToast(true);
+      setTimeout(() => setShowMilestoneToast(false), 3500);
+    }
+  }, [selectedOptionId, isAnswerLocked, currentQuestion, currentIndex]);
 
   /**
    * Advances to next question or finalizes quiz if on the last question
@@ -141,6 +181,7 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
       setSelectedOptionId(null);
       setIsAnswerLocked(false);
       setIsFeedbackVisible(false);
+      setIsHintVisible(false);
     } else {
       // Completed all questions in the round
       sound.playComplete();
@@ -167,13 +208,20 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
       isCorrect: false,
       topic: currentQuestion.topic,
       explanation: currentQuestion.explanation,
-      source: currentQuestion.source,
+      hint: currentQuestion.hint,
+      sourceTitle: currentQuestion.sourceTitle,
+      sourceUrl: currentQuestion.sourceUrl,
       skipped: true
     };
 
     setAnswers(prev => [...prev, answerRecord]);
     setIsFeedbackVisible(true);
-  }, [isAnswerLocked, currentQuestion]);
+
+    if (currentIndex === 2) {
+      setShowMilestoneToast(true);
+      setTimeout(() => setShowMilestoneToast(false), 3500);
+    }
+  }, [isAnswerLocked, currentQuestion, currentIndex]);
 
   /**
    * Cleanly restarts the quiz with fresh question order and chosen mode
@@ -186,6 +234,8 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
     setSelectedOptionId(null);
     setIsAnswerLocked(false);
     setIsFeedbackVisible(false);
+    setIsHintVisible(false);
+    setShowMilestoneToast(false);
     setAnswers([]);
     setIsCompleted(false);
     setElapsedSeconds(0);
@@ -213,12 +263,15 @@ export function useQuiz(initialTimerEnabled = true, initialMode = 'classic') {
     selectedOptionId,
     isAnswerLocked,
     isFeedbackVisible,
+    isHintVisible,
+    showMilestoneToast,
     answers,
     isCompleted,
     timerEnabled,
     elapsedSeconds,
     scorecard,
     selectOption: handleSelectOption,
+    toggleHint: handleToggleHint,
     confirmAnswer: handleConfirmAnswer,
     nextQuestion: handleNextQuestion,
     skipQuestion: handleSkipQuestion,
